@@ -1,9 +1,17 @@
 import { AuthLayout } from '@/components';
+import { env } from '@/constants';
+import { AuthContext, AuthProvider } from '@/context';
 import { NextPageWithLayout } from '@/model';
-import { ReactNode } from 'react';
-import { Card, CardBody, CardFooter, Typography, Input, Button } from '@material-tailwind/react';
+import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
+import { ReactNode, useContext } from 'react';
 
 const SigninPage: NextPageWithLayout = () => {
+  const { login } = useContext(AuthContext);
+
+  const handleTestAccountClick = async () => {
+    login(env.TEST_EMAIL, env.TEST_PW);
+  };
+
   return (
     <Card className='w-96'>
       <CardBody className='flex flex-col gap-4 mb-4'>
@@ -17,7 +25,13 @@ const SigninPage: NextPageWithLayout = () => {
         <Button className='text-sm' variant='gradient' fullWidth>
           로그인
         </Button>
-        <Button className='text-sm' variant='gradient' fullWidth color='pink'>
+        <Button
+          className='text-sm'
+          variant='gradient'
+          fullWidth
+          color='pink'
+          onClick={handleTestAccountClick}
+        >
           테스트 계정 이용하기
         </Button>
       </CardFooter>
@@ -26,7 +40,11 @@ const SigninPage: NextPageWithLayout = () => {
 };
 
 SigninPage.getLayout = (page: ReactNode) => {
-  return <AuthLayout>{page}</AuthLayout>;
+  return (
+    <AuthProvider>
+      <AuthLayout>{page}</AuthLayout>;
+    </AuthProvider>
+  );
 };
 
 export default SigninPage;

@@ -1,8 +1,16 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
+import { AuthContext, AuthProvider } from '@/context';
+import { Button } from '@material-tailwind/react';
+import { ReactNode, useContext } from 'react';
 
 export default function Home() {
-  return <div>Hello World</div>;
+  const { logout } = useContext(AuthContext);
+  const handleClick = () => {
+    logout();
+  };
+
+  return <Button onClick={handleClick}>로그아웃</Button>;
 }
+
+Home.getLayout = (page: ReactNode) => {
+  return <AuthProvider>{page}</AuthProvider>;
+};
