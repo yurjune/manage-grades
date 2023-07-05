@@ -1,16 +1,23 @@
-import { AuthContext, AuthProvider } from '@/context';
-import { Button } from '@material-tailwind/react';
-import { ReactNode, useContext } from 'react';
+import { HomeLayout } from '@/components';
+import { Sidebar } from '@/components/Sidebar';
+import { AuthProvider } from '@/context';
+import { NextPageWithLayout } from '@/model';
+import { ReactNode } from 'react';
 
-export default function Home() {
-  const { logout } = useContext(AuthContext);
-  const handleClick = () => {
-    logout();
-  };
-
-  return <Button onClick={handleClick}>로그아웃</Button>;
-}
+const Home: NextPageWithLayout = () => {
+  return (
+    <div className='flex'>
+      <Sidebar />
+    </div>
+  );
+};
 
 Home.getLayout = (page: ReactNode) => {
-  return <AuthProvider>{page}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <HomeLayout>{page}</HomeLayout>
+    </AuthProvider>
+  );
 };
+
+export default Home;
