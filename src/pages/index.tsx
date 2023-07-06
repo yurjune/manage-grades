@@ -1,4 +1,4 @@
-import { HomeLayout } from '@/components';
+import { Header, HomeLayout } from '@/components';
 import { Sidebar } from '@/components/Sidebar';
 import { AuthProvider } from '@/context';
 import { NextPageWithLayout } from '@/model';
@@ -8,6 +8,9 @@ const Home: NextPageWithLayout = () => {
   return (
     <div className='flex'>
       <Sidebar />
+      <div className='flex flex-col flex-1'>
+        <Header />
+      </div>
     </div>
   );
 };
