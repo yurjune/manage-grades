@@ -1,22 +1,7 @@
-import {
-  Card,
-  Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-} from '@material-tailwind/react';
-import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
-  PowerIcon,
-} from '@heroicons/react/24/solid';
-import { useContext } from 'react';
 import { AuthContext } from '@/context';
+import { PowerIcon, PresentationChartBarIcon, ShoppingBagIcon } from '@heroicons/react/24/solid';
+import { Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react';
+import { useContext } from 'react';
 
 export const Sidebar = () => {
   const { logout } = useContext(AuthContext);
@@ -33,34 +18,13 @@ export const Sidebar = () => {
           <ListItemPrefix>
             <PresentationChartBarIcon className='h-5 w-5' />
           </ListItemPrefix>
-          Dashboard
+          성적 관리
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className='h-5 w-5' />
           </ListItemPrefix>
-          E-Commerce
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <InboxIcon className='h-5 w-5' />
-          </ListItemPrefix>
-          Inbox
-          <ListItemSuffix>
-            <Chip value='14' size='sm' variant='ghost' color='blue-gray' className='rounded-full' />
-          </ListItemSuffix>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <UserCircleIcon className='h-5 w-5' />
-          </ListItemPrefix>
-          Profile
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <Cog6ToothIcon className='h-5 w-5' />
-          </ListItemPrefix>
-          Settings
+          학생 통계
         </ListItem>
         <ListItem onClick={logout}>
           <ListItemPrefix>
