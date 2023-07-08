@@ -1,8 +1,14 @@
 import { AppPropsWithLayout } from '@/model';
+import { store } from '@/redux/store';
 import '@/styles/globals.css';
+import { Provider } from 'react-redux';
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
-  return getLayout(<Component {...pageProps} />);
+  return getLayout(
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>,
+  );
 }
