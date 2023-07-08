@@ -3,7 +3,7 @@ import { store } from '@/redux/store';
 import '@/styles/globals.css';
 import { Provider } from 'react-redux';
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
   return getLayout(
@@ -12,3 +12,5 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     </Provider>,
   );
 }
+
+export default App;
