@@ -1,15 +1,15 @@
+import { Student } from '@/model';
 import { Typography } from '@material-tailwind/react';
-import { type Row } from './Table';
 
 interface TableBodyProps {
-  list: Row[];
+  rows: Student[];
 }
 
-export const TableBody = ({ list }: TableBodyProps) => {
+export const TableBody = ({ rows }: TableBodyProps) => {
   return (
     <tbody>
-      {list.map(({ name, group, math, english }, index) => {
-        const isLast = index === list.length - 1;
+      {rows.map(({ name, gender, grade, group }, index) => {
+        const isLast = index === rows.length - 1;
         const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
         return (
@@ -21,17 +21,17 @@ export const TableBody = ({ list }: TableBodyProps) => {
             </td>
             <td className={classes}>
               <Typography variant='small' color='blue-gray' className='font-normal'>
+                {gender}
+              </Typography>
+            </td>
+            <td className={classes}>
+              <Typography variant='small' color='blue-gray' className='font-normal'>
+                {grade}
+              </Typography>
+            </td>
+            <td className={classes}>
+              <Typography variant='small' color='blue-gray' className='font-normal'>
                 {group}
-              </Typography>
-            </td>
-            <td className={classes}>
-              <Typography variant='small' color='blue-gray' className='font-normal'>
-                {math}
-              </Typography>
-            </td>
-            <td className={classes}>
-              <Typography variant='small' color='blue-gray' className='font-normal'>
-                {english}
               </Typography>
             </td>
           </tr>

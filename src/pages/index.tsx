@@ -1,12 +1,16 @@
-import { Header, HomeLayout, StudentAddDialog, Table } from '@/components';
+import { Header, HomeLayout, StudentAddDialog } from '@/components';
 import { Sidebar } from '@/components/Sidebar';
+import { Table, TableBody, TableHead } from '@/components/StudentsTable';
 import { AuthProvider } from '@/context';
-import { NextPageWithLayout } from '@/model';
+import type { NextPageWithLayout, Student } from '@/model';
 import { Button } from '@material-tailwind/react';
 import { ReactNode, useState } from 'react';
 
+const TABLE_FIELDS = ['이름', '성별', '학년', '반'];
+
 const Home: NextPageWithLayout = () => {
   const [open, setOpen] = useState(false);
+  const [students, setStudents] = useState<Student[]>([]);
 
   return (
     <>
@@ -15,7 +19,10 @@ const Home: NextPageWithLayout = () => {
         <div className='flex flex-col flex-1'>
           <Header />
           <div className='p-6'>
-            <Table />
+            <Table>
+              <TableHead fields={TABLE_FIELDS} />
+              <TableBody rows={students} />
+            </Table>
             <Button onClick={() => setOpen(true)} className='mt-4 float-right'>
               학생 추가
             </Button>
