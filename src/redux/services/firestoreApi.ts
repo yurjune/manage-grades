@@ -1,7 +1,7 @@
 import { db } from '@/firebase-config';
 import { Student } from '@/model';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 
 export const firestoreApi = createApi({
   reducerPath: 'firestore/api',
@@ -61,6 +61,18 @@ export const firestoreApi = createApi({
       },
       invalidatesTags: ['Students'],
     }),
+    deleteStudent: builder.mutation<null, string>({
+      queryFn: async (uid) => {
+        try {
+          const ref = doc(db, 'students', uid);
+          await deleteDoc(ref);
+          return { data: null };
+        } catch (err) {
+          return { error: err };
+        }
+      },
+      invalidatesTags: ['Students'],
+    }),
   }),
 });
 
@@ -69,4 +81,5 @@ export const {
   useAddStudentMutation,
   useEditStudentMutation,
   useGetStudentQuery,
+  useDeleteStudentMutation,
 } = firestoreApi;

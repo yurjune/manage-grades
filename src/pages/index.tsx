@@ -7,9 +7,9 @@ import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { Button } from '@material-tailwind/react';
-import { ReactNode } from 'react';
+import { ReactNode, Fragment } from 'react';
 
-const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정'];
+const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정', '삭제'];
 
 const Home: NextPageWithLayout = () => {
   const { data: students } = useGetStudentsQuery();
@@ -23,7 +23,7 @@ const Home: NextPageWithLayout = () => {
   };
 
   return (
-    <>
+    <Fragment>
       <div className='flex'>
         <Sidebar />
         <div className='flex flex-col flex-1'>
@@ -44,7 +44,7 @@ const Home: NextPageWithLayout = () => {
         handleDialog={handleStudentDialog}
         selectedStudent={selectedStudent}
       />
-    </>
+    </Fragment>
   );
 };
 
