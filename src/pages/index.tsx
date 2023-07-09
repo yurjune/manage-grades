@@ -1,16 +1,26 @@
-import { Header, HomeLayout, StudentAddDialog } from '@/components';
-import { Sidebar } from '@/components/Sidebar';
+import { Header, HomeLayout, StudentDialog, Sidebar } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/StudentsTable';
 import { AuthProvider } from '@/context';
-import type { NextPageWithLayout, Student } from '@/model';
+import type { NextPageWithLayout } from '@/model';
+import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
+import { selectStudent } from '@/redux/features/student/studentSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { Button } from '@material-tailwind/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
-const TABLE_FIELDS = ['이름', '성별', '학년', '반'];
+const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정'];
 
 const Home: NextPageWithLayout = () => {
-  const [open, setOpen] = useState(false);
-  const [students, setStudents] = useState<Student[]>([]);
+  const { data: students } = useGetStudentsQuery();
+  const selectedStudent = useAppSelector((state) => state.student.value);
+  const dispatch = useAppDispatch();
+
+  const open = useAppSelector((state) => state.dialogs.studentDialogOpen);
+  const handleStudentDialog = () => {
+    dispatch(toggleStudentDialog());
+    dispatch(selectStudent({ value: null }));
+  };
 
   return (
     <>
@@ -21,15 +31,19 @@ const Home: NextPageWithLayout = () => {
           <div className='p-6'>
             <Table>
               <TableHead fields={TABLE_FIELDS} />
-              <TableBody rows={students} />
+              <TableBody rows={students ?? []} />
             </Table>
-            <Button onClick={() => setOpen(true)} className='mt-4 float-right'>
+            <Button className='mt-4 float-right' onClick={() => dispatch(openStudentDialog())}>
               학생 추가
             </Button>
           </div>
         </div>
       </div>
-      <StudentAddDialog open={open} handleOpen={() => setOpen((cur) => !cur)} />
+      <StudentDialog
+        open={open}
+        handleDialog={handleStudentDialog}
+        selectedStudent={selectedStudent}
+      />
     </>
   );
 };

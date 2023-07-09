@@ -3,4 +3,5 @@ export type Student = {
   grade: string;
   group: string;
   gender: string;
+  uid: string;
 };
