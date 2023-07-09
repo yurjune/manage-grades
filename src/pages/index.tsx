@@ -6,7 +6,7 @@ import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogs
 import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
-import { Button } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import { ReactNode, Fragment } from 'react';
 
 const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정', '삭제'];
@@ -29,6 +29,9 @@ const Home: NextPageWithLayout = () => {
         <div className='flex flex-col flex-1'>
           <Header />
           <div className='p-6'>
+            <Typography variant='h4' className='mb-6 ml-1'>
+              학생 관리
+            </Typography>
             {isLoading ? (
               <SpinnerContainer />
             ) : (
