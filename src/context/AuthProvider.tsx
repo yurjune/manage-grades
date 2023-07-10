@@ -1,3 +1,4 @@
+import { LoadingView } from '@/components';
 import { auth } from '@/firebase-config';
 import { User, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/router';
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      {authorized ? children : <div>loading...</div>}
+      {authorized ? children : <LoadingView />}
     </AuthContext.Provider>
   );
 };

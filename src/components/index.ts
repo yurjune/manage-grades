@@ -7,3 +7,4 @@ export * from './DeleteConfirmDialog';
 export * from './SpinnerContainer';
 export * from './CustomTabs';
 export * from './ScoreDialog';
+export * from './LoadingView';
