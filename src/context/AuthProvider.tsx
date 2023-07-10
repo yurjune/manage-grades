@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           return;
         }
       } else {
-        if (router.pathname === '/') {
+        if (['/', '/scores'].includes(router.pathname)) {
           router.push('/signin');
           return;
         }
