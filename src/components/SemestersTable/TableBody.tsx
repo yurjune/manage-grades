@@ -1,22 +1,31 @@
 import { Student } from '@/model';
-import { Typography } from '@material-tailwind/react';
+import { openScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
+import { selectStudent } from '@/redux/features/student/studentSlice';
+import { useAppDispatch } from '@/redux/hooks';
+import { Typography, IconButton } from '@material-tailwind/react';
 import { Fragment } from 'react';
-
-type row = Pick<Student, 'uid' | 'name' | 'group' | 'semesters'>;
+import { FaEdit } from 'react-icons/fa';
 
 interface TableBodyProps {
-  rows: row[];
+  rows: Student[];
   semester: string;
 }
 
 export const TableBody = ({ rows, semester }: TableBodyProps) => {
-  const filteredRows = rows.filter((item) => item.semesters[semester]);
+  const dispatch = useAppDispatch();
+  const filteredRows = rows.filter((item) => item?.semesters?.[semester]);
+
+  const handleEditClick = (student: Student) => () => {
+    dispatch(selectStudent({ value: student }));
+    dispatch(openScoreDialog());
+  };
+
   return (
     <Fragment>
       <tbody>
-        {filteredRows.map((data, index) => {
-          const { uid, name, group, semesters } = data;
-          const { english, math } = semesters[semester];
+        {filteredRows.map((student, index) => {
+          const { uid, name, group, semesters } = student;
+          const { english, math } = semesters ? semesters[semester] : { english: '-', math: '-' };
           const isLast = index === rows.length - 1;
           const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
@@ -28,12 +37,12 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
                 </Typography>
               </td>
               <td className={classes}>
-                <Typography variant='small' color='blue-gray' className='font-bold'>
+                <Typography variant='small' color='blue-gray' className='font-normal'>
                   {name}
                 </Typography>
               </td>
               <td className={classes}>
-                <Typography variant='small' color='blue-gray' className='font-bold'>
+                <Typography variant='small' color='blue-gray' className='font-normal'>
                   {group}
                 </Typography>
               </td>
@@ -46,6 +55,11 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
                 <Typography variant='small' color='blue-gray' className='font-normal'>
                   {math}
                 </Typography>
+              </td>
+              <td className={classes}>
+                <IconButton size='sm' onClick={handleEditClick(student)}>
+                  <FaEdit />
+                </IconButton>
               </td>
             </tr>
           );

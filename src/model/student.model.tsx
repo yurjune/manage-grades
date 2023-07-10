@@ -6,5 +6,5 @@ export type Student = {
   group: string;
   gender: string;
   uid: string;
-  semesters: Semester;
+  semesters?: Semester;
 };

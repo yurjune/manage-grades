@@ -3,12 +3,13 @@ import { Table, TableBody, TableHead } from '@/components/SemestersTable';
 import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
 import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
+import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-const TABLE_FIELDS = ['학기', '이름', '반', '영어', '수학'];
+const TABLE_FIELDS = ['학기', '이름', '반', '영어', '수학', '수정'];
 const TAB_FIELDS = [
   { label: '전체', value: '' },
   { label: 'A반', value: 'A' },
@@ -22,10 +23,12 @@ const ScoresPage = () => {
   const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
   const { data: students = [], isLoading } = useGetStudentsQuery({ group: tabValue });
   const open = useAppSelector((state) => state.dialogs.scoreDialogOpen);
+  const selectedStudent = useAppSelector((state) => state.student.value);
   const dispatch = useAppDispatch();
 
   const handleScoreDialog = () => {
     dispatch(toggleScoreDialog());
+    dispatch(selectStudent({ value: null }));
   };
 
   return (
@@ -56,6 +59,8 @@ const ScoresPage = () => {
         handleDialog={handleScoreDialog}
         students={students}
         semesters={SEMESTER_FIELDS}
+        selectedStudent={selectedStudent}
+        currentSemester={semester}
       />
     </Fragment>
   );
