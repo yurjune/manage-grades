@@ -1,23 +1,38 @@
 import { db } from '@/firebase-config';
 import { Student } from '@/model';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 
 export const firestoreApi = createApi({
   reducerPath: 'firestore/api',
   baseQuery: fakeBaseQuery(),
   tagTypes: ['Students'],
   endpoints: (builder) => ({
-    getStudents: builder.query<Student[], void>({
-      queryFn: async () => {
+    getStudents: builder.query<Student[], Pick<Student, 'group'>>({
+      queryFn: async ({ group }) => {
         try {
-          const ref = collection(db, 'students');
-          const snapshot = await getDocs(ref);
           const students: Student[] = [];
+          const ref = collection(db, 'students');
+          const snapshot =
+            group !== ''
+              ? await getDocs(query(ref, where('group', '==', group)))
+              : await getDocs(ref);
+
           snapshot?.forEach((doc) => {
             const student = { uid: doc.id, ...doc.data() } as Student;
             students.push(student);
           });
+
           return { data: students };
         } catch (err) {
           return { error: err };
