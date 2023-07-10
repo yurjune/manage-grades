@@ -44,12 +44,12 @@ export const TableBody = ({ rows }: TableBodyProps) => {
     <Fragment>
       <tbody>
         {rows.map((data, index) => {
-          const { name, gender, grade, group } = data;
+          const { uid, name, gender, grade, group } = data;
           const isLast = index === rows.length - 1;
           const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
           return (
-            <tr key={name}>
+            <tr key={uid}>
               <td className={classes}>
                 <Typography variant='small' color='blue-gray' className='font-bold'>
                   {name}
