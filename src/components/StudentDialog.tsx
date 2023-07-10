@@ -45,7 +45,7 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
 
     const formValues = { name, gender, grade, group };
     if (editMode) {
-      await editStudent({ ...formValues, uid: selectedStudent.uid });
+      await editStudent({ ...selectedStudent, ...formValues });
     } else {
       await addStudent({ ...formValues });
     }

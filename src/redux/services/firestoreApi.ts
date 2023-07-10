@@ -52,7 +52,7 @@ export const firestoreApi = createApi({
         }
       },
     }),
-    addStudent: builder.mutation<null, Omit<Student, 'uid'>>({
+    addStudent: builder.mutation<null, Omit<Student, 'uid' | 'semesters'>>({
       queryFn: async (data) => {
         try {
           const ref = collection(db, 'students');
