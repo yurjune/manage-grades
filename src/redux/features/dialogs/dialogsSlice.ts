@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   studentDialogOpen: false,
+  scoreDialogOpen: false,
 };
 
 export const dialogsSlice = createSlice({
@@ -14,9 +15,16 @@ export const dialogsSlice = createSlice({
     toggleStudentDialog(state) {
       state.studentDialogOpen = !state;
     },
+    openScoreDialog(state) {
+      state.scoreDialogOpen = true;
+    },
+    toggleScoreDialog(state) {
+      state.scoreDialogOpen = !state;
+    },
   },
 });
 
-export const { openStudentDialog, toggleStudentDialog } = dialogsSlice.actions;
+export const { openStudentDialog, toggleStudentDialog, openScoreDialog, toggleScoreDialog } =
+  dialogsSlice.actions;
 
 export default dialogsSlice.reducer;

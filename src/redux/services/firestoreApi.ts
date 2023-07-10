@@ -10,6 +10,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 
@@ -88,8 +89,32 @@ export const firestoreApi = createApi({
       },
       invalidatesTags: ['Students'],
     }),
+    addScores: builder.mutation<null, AddScoresArgs>({
+      queryFn: async (args) => {
+        try {
+          const ref = doc(db, 'students', args.uid);
+          await updateDoc(ref, {
+            [`semesters.${args.semester}`]: {
+              math: args.math,
+              english: args.english,
+            },
+          });
+          return { data: null };
+        } catch (err) {
+          return { error: err };
+        }
+      },
+      invalidatesTags: ['Students'],
+    }),
   }),
 });
+
+type AddScoresArgs = {
+  uid: string;
+  semester: string;
+  math: string;
+  english: string;
+};
 
 export const {
   useGetStudentsQuery,
@@ -97,4 +122,5 @@ export const {
   useEditStudentMutation,
   useGetStudentQuery,
   useDeleteStudentMutation,
+  useAddScoresMutation,
 } = firestoreApi;

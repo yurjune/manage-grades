@@ -1,10 +1,12 @@
-import { CustomTabs, DashboardLayout, SpinnerContainer } from '@/components';
+import { CustomTabs, DashboardLayout, ScoreDialog, SpinnerContainer } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/SemestersTable';
 import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
+import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
-import { Select, Option } from '@material-tailwind/react';
-import React, { Fragment, ReactNode, useState } from 'react';
+import { Button, Option, Select } from '@material-tailwind/react';
+import { Fragment, ReactNode, useState } from 'react';
 
 const TABLE_FIELDS = ['학기', '이름', '반', '영어', '수학'];
 const TAB_FIELDS = [
@@ -16,9 +18,15 @@ const TAB_FIELDS = [
 const SEMESTER_FIELDS = ['23-1', '23-2'];
 
 const ScoresPage = () => {
-  const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
   const [tabValue, setTabValue] = useState(TAB_FIELDS[0].value);
-  const { data: students, isLoading } = useGetStudentsQuery({ group: tabValue });
+  const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
+  const { data: students = [], isLoading } = useGetStudentsQuery({ group: tabValue });
+  const open = useAppSelector((state) => state.dialogs.scoreDialogOpen);
+  const dispatch = useAppDispatch();
+
+  const handleScoreDialog = () => {
+    dispatch(toggleScoreDialog());
+  };
 
   return (
     <Fragment>
@@ -40,6 +48,15 @@ const ScoresPage = () => {
           <TableBody rows={students ?? []} semester={semester} />
         </Table>
       )}
+      <Button onClick={() => dispatch(openScoreDialog())} className='mt-4 float-right'>
+        성적 추가
+      </Button>
+      <ScoreDialog
+        open={open}
+        handleDialog={handleScoreDialog}
+        students={students}
+        semesters={SEMESTER_FIELDS}
+      />
     </Fragment>
   );
 };

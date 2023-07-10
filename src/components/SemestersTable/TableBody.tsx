@@ -15,7 +15,6 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
     <Fragment>
       <tbody>
         {filteredRows.map((data, index) => {
-          console.log(data);
           const { uid, name, group, semesters } = data;
           const { english, math } = semesters[semester];
           const isLast = index === rows.length - 1;
