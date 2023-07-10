@@ -33,16 +33,25 @@ const ScoresPage = () => {
 
   return (
     <Fragment>
-      <div className='w-24 mb-4'>
-        <Select label='학기' value={semester} onChange={handleSemesterChange} className='bg-white'>
-          {SEMESTER_FIELDS.map((val) => (
-            <Option key={val} value={val}>
-              {val}
-            </Option>
-          ))}
-        </Select>
+      <div className='flex mb-4'>
+        <div>
+          <Select
+            label='학기'
+            value={semester}
+            onChange={handleSemesterChange}
+            className='bg-white'
+          >
+            {SEMESTER_FIELDS.map((val) => (
+              <Option key={val} value={val}>
+                {val}
+              </Option>
+            ))}
+          </Select>
+        </div>
+        <div className='flex-1 ml-4'>
+          <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+        </div>
       </div>
-      <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
       {isLoading ? (
         <SpinnerContainer />
       ) : (

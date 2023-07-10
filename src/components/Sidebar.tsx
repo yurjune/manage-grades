@@ -1,4 +1,9 @@
-import { PresentationChartBarIcon, UsersIcon, UserCircleIcon } from '@heroicons/react/24/solid';
+import {
+  PresentationChartBarIcon,
+  UsersIcon,
+  UserCircleIcon,
+  PencilIcon,
+} from '@heroicons/react/24/solid';
 import { Card, List, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react';
 import { useRouter } from 'next/router';
 
@@ -9,7 +14,12 @@ const lists = [
     icon: <UsersIcon className='h-5 w-5' />,
   },
   {
-    title: '학생 통계',
+    title: '성적 관리',
+    path: '/scores',
+    icon: <PencilIcon className='h-5 w-5' />,
+  },
+  {
+    title: '성적 통계',
     path: '/#',
     icon: <PresentationChartBarIcon className='h-5 w-5' />,
   },

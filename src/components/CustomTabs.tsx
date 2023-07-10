@@ -8,8 +8,8 @@ interface CustomTabsProps {
 
 export const CustomTabs = ({ fields, value, onChange }: CustomTabsProps) => {
   return (
-    <Tabs value={value} className='mb-4'>
-      <TabsHeader>
+    <Tabs value={value}>
+      <TabsHeader className='bg-transparent'>
         {fields.map(({ label, value }) => (
           <Tab key={value} value={value} onClick={() => onChange?.(value)}>
             {label}

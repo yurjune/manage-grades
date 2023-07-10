@@ -31,7 +31,9 @@ const Home: NextPageWithLayout = () => {
 
   return (
     <Fragment>
-      <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+      <div className='mb-4'>
+        <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+      </div>
       {isLoading ? (
         <SpinnerContainer />
       ) : (
