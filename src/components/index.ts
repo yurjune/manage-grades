@@ -1,5 +1,5 @@
 export * from './auth-layout';
-export * from './HomeLayout';
+export * from './DashboardLayout';
 export * from './Header';
 export * from './StudentsTable';
 export * from './StudentDialog';
