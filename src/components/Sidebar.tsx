@@ -35,7 +35,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <Card className='h-screen w-full max-w-[18rem] p-4  rounded-none'>
+    <Card className='w-full max-w-[17rem] p-4 rounded-none'>
       <div className='mb-2 p-4 flex items-center cursor-pointer'>
         <UserCircleIcon className='h-8 w-8 mr-3' />
         <Typography variant='h5' color='blue-gray'>
