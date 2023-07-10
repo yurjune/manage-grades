@@ -1,18 +1,15 @@
 import { AppPropsWithLayout } from '@/model';
-import { store } from '@/redux/store';
+import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
-import { Provider } from 'react-redux';
 import { ThemeProvider } from '@material-tailwind/react';
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
 
   return getLayout(
-    <Provider store={store}>
-      <ThemeProvider value={customTheme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </Provider>,
+    <ThemeProvider value={customTheme}>
+      <Component {...pageProps} />
+    </ThemeProvider>,
   );
 }
 
@@ -39,4 +36,4 @@ const customTheme = {
   },
 };
 
-export default App;
+export default wrapper.withRedux(App);

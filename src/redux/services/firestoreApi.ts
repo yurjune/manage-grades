@@ -13,9 +13,16 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { HYDRATE } from 'next-redux-wrapper';
 
 export const firestoreApi = createApi({
   reducerPath: 'firestore/api',
+  // For SSR
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   baseQuery: fakeBaseQuery(),
   tagTypes: ['Students'],
   endpoints: (builder) => ({
