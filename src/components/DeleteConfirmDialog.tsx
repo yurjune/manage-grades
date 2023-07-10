@@ -11,10 +11,10 @@ export const DeleteConfirmDialog = ({ open, onClose, onConfirm }: DeleteConfirmD
     <Dialog open={open} handler={onClose}>
       <DialogHeader className='mt-4 mb-8 text-center'>정말로 삭제하시겠습니까?</DialogHeader>
       <DialogFooter>
-        <Button variant='text' color='red' onClick={onClose} className='mr-1'>
+        <Button variant='outlined' onClick={onClose} className='mr-2'>
           <span>취소</span>
         </Button>
-        <Button variant='gradient' color='green' onClick={onConfirm}>
+        <Button variant='gradient' color='red' onClick={onConfirm}>
           <span>삭제</span>
         </Button>
       </DialogFooter>
