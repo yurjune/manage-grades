@@ -56,7 +56,7 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
                   {math}
                 </Typography>
               </td>
-              <td className={classes}>
+              <td className={`${classes} w-[120px]`}>
                 <IconButton size='sm' onClick={handleEditClick(student)}>
                   <FaEdit />
                 </IconButton>

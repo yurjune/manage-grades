@@ -70,12 +70,10 @@ export const TableBody = ({ rows }: TableBodyProps) => {
                   {group}
                 </Typography>
               </td>
-              <td className={classes}>
-                <IconButton size='sm' onClick={handleEditClick(data)}>
+              <td className={`${classes} w-[170px]`}>
+                <IconButton size='sm' onClick={handleEditClick(data)} className='mr-4'>
                   <FaEdit />
                 </IconButton>
-              </td>
-              <td className={classes}>
                 <IconButton size='sm' color='red' onClick={handleDeleteClick(data)}>
                   <AiOutlineUserDelete size='18px' />
                 </IconButton>

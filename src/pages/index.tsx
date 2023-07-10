@@ -9,7 +9,7 @@ import { useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { Button } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정', '삭제'];
+const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정/삭제'];
 const TAB_FIELDS = [
   { label: '전체', value: '' },
   { label: 'A반', value: 'A' },
