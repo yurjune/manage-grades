@@ -33,11 +33,12 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   const [english, handleEnglishChange, setEnglish] = useInput('');
   const editMode = Boolean(selectedStudent);
 
+  // TODO: 로직 개선
   useEffect(() => {
     setStudent(selectedStudent?.uid ?? '');
     setSemester(currentSemester);
-    setMath(selectedStudent?.semesters?.[currentSemester].math ?? '');
-    setEnglish(selectedStudent?.semesters?.[currentSemester].english ?? '');
+    setMath(selectedStudent?.semesters?.[currentSemester].math.toString() ?? '');
+    setEnglish(selectedStudent?.semesters?.[currentSemester].english.toString() ?? '');
   }, [selectedStudent, currentSemester, setStudent, setSemester, setMath, setEnglish]);
 
   const candidates = students.map((student) => ({
@@ -46,11 +47,16 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   }));
 
   const handleSubmit = async () => {
-    if ([student, semester, math, english].some((val) => !val)) {
-      return;
-    }
+    if ([student, semester, math, english].some((val) => !val)) return;
+    if ([math, english].some((val) => !Number.isInteger(Number(val)))) return;
 
-    await addScores({ uid: student, semester, math, english });
+    await addScores({
+      uid: student,
+      semester,
+      math: Number(math),
+      english: Number(english),
+    });
+
     handleDialog();
   };
 

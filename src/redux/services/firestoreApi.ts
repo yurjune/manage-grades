@@ -119,8 +119,8 @@ export const firestoreApi = createApi({
 type AddScoresArgs = {
   uid: string;
   semester: string;
-  math: string;
-  english: string;
+  math: number;
+  english: number;
 };
 
 export const {
