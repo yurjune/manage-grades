@@ -40,10 +40,10 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
     setStudent(selectedStudent?.uid ?? '');
     setSemester(currentSemester);
 
-    setKorean(selectedStudent?.semesters?.[currentSemester].korean.toString() ?? '');
-    setMath(selectedStudent?.semesters?.[currentSemester].math.toString() ?? '');
-    setEnglish(selectedStudent?.semesters?.[currentSemester].english.toString() ?? '');
-    setScience(selectedStudent?.semesters?.[currentSemester].science.toString() ?? '');
+    setKorean(selectedStudent?.semesters?.[currentSemester].korean?.toString() ?? '');
+    setMath(selectedStudent?.semesters?.[currentSemester].math?.toString() ?? '');
+    setEnglish(selectedStudent?.semesters?.[currentSemester].english?.toString() ?? '');
+    setScience(selectedStudent?.semesters?.[currentSemester].science?.toString() ?? '');
   }, [
     open,
     selectedStudent,
