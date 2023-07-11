@@ -3,22 +3,23 @@ import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { wrapper } from '@/redux/store';
-import { getAverageScoresForCurrentSemester } from '@/utils';
+import { getAverageScoresOfSemester } from '@/utils';
 import { Option, Select } from '@material-tailwind/react';
-import { Fragment, ReactNode, useMemo, useState } from 'react';
+import { Fragment, ReactNode, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-type TabValue = 'A' | 'B' | 'C';
 const TAB_FIELDS = [
   { label: 'A반', value: 'A' },
   { label: 'B반', value: 'B' },
   { label: 'C반', value: 'C' },
 ];
+const initialTabValue = TAB_FIELDS[0].value;
 const SEMESTER_FIELDS = ['23-1', '23-2'];
 const SUBJECT_FIELDS = ['수학', '영어'];
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: '' }));
+  store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: initialTabValue }));
   await Promise.all(store.dispatch(firestoreApi.util.getRunningQueriesThunk()));
 
   return {
@@ -27,14 +28,13 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 });
 
 export const StasticsPage = () => {
-  const [tabValue, setTabValue] = useState('A');
+  const [tabValue, setTabValue] = useState(initialTabValue);
   const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
-  const { data: students = [] } = useGetStudentsQuery({ group: '' });
+  const { data: totalStudents = [] } = useGetStudentsQuery({ group: '' });
+  const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
 
-  const scores = useMemo(
-    () => getAverageScoresForCurrentSemester(students, semester),
-    [students, semester],
-  );
+  const totalAverage = getAverageScoresOfSemester(totalStudents, semester);
+  const currentGroupAverage = getAverageScoresOfSemester(students, semester);
 
   const chartData = {
     labels: SUBJECT_FIELDS,
@@ -43,13 +43,13 @@ export const StasticsPage = () => {
         label: '전체',
         backgroundColor: 'gold',
         borderWidth: 2,
-        data: Object.values(scores.total),
+        data: Object.values(totalAverage ?? { math: 0, english: 0 }),
       },
       {
         label: tabValue + '반',
         backgroundColor: 'purple',
         borderWidth: 2,
-        data: Object.values(scores[tabValue as TabValue]),
+        data: Object.values(currentGroupAverage ?? { math: 0, english: 0 }),
       },
     ],
   };
@@ -75,14 +75,12 @@ export const StasticsPage = () => {
           <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
         </div>
       </div>
-      <div className='w-[90%] mx-auto'>
-        <Bar data={chartData} options={chartOptions} />
-      </div>
+      <div className='w-[90%] mx-auto'>{<Bar data={chartData} options={chartOptions} />}</div>
     </Fragment>
   );
 };
 
-export const chartOptions = {
+const chartOptions = {
   maxBarThickness: 80,
   scales: {
     y: {
