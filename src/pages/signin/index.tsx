@@ -1,7 +1,7 @@
 import { AuthLayout } from '@/components';
-import { env } from '@/constants';
-import { AuthContext, AuthProvider } from '@/context';
-import { NextPageWithLayout } from '@/model';
+import { env } from '@/shared/constants';
+import { AuthContext, AuthProvider } from '@/shared/context';
+import { NextPageWithLayout } from '@/shared/model';
 import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
 import { ReactNode, useContext } from 'react';
 

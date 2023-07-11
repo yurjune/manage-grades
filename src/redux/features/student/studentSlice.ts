@@ -1,4 +1,4 @@
-import { Student } from '@/model';
+import { Student } from '@/shared/model';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 const initialState: {

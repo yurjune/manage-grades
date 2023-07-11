@@ -1,13 +1,13 @@
 import { CustomTabs, DashboardLayout, ScoreDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/SemestersTable';
-import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS } from '@/constants';
-import { AuthProvider } from '@/context';
-import { useSelect } from '@/hooks';
-import { NextPageWithLayout } from '@/model';
+import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS } from '@/shared/constants';
+import { AuthProvider } from '@/shared/context';
+import { useSelect } from '@/shared/hooks';
+import { NextPageWithLayout } from '@/shared/model';
 import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { firestoreApi, useGetStudentsQuery } from '@/redux/services/firestoreApi';
+import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { wrapper } from '@/redux/store';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';

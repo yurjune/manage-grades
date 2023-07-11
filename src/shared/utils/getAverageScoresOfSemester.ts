@@ -1,4 +1,4 @@
-import { Score, Student } from '@/model';
+import { Score, Student } from '@/shared/model';
 
 export const getAverageScoresOfSemester = (students: Student[], semester: string): Score | null => {
   const semesters = students

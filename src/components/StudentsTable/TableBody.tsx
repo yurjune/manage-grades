@@ -1,4 +1,4 @@
-import { Student } from '@/model';
+import { Student } from '@/shared/model';
 import { openStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -7,7 +7,7 @@ import { FaEdit } from 'react-icons/fa';
 import { AiOutlineUserDelete } from 'react-icons/ai';
 import { Fragment, useState } from 'react';
 import { DeleteConfirmDialog } from '../DeleteConfirmDialog';
-import { useDeleteStudentMutation } from '@/redux/services/firestoreApi';
+import { useDeleteStudentMutation } from '@/redux/firestoreApi';
 
 interface TableBodyProps {
   rows: Student[];

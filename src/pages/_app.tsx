@@ -1,4 +1,4 @@
-import { AppPropsWithLayout } from '@/model';
+import { AppPropsWithLayout } from '@/shared/model';
 import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@material-tailwind/react';

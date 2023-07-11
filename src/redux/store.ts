@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { firestoreApi } from './services/firestoreApi';
+import { firestoreApi } from './firestoreApi';
 import studentReducer from './features/student/studentSlice';
 import dialogsReducer from './features/dialogs/dialogsSlice';
 import { Context, createWrapper } from 'next-redux-wrapper';

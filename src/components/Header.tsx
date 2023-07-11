@@ -1,4 +1,4 @@
-import { AuthContext } from '@/context';
+import { AuthContext } from '@/shared/context';
 import { Button, Navbar, Typography } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useContext } from 'react';

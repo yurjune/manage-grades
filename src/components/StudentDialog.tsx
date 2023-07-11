@@ -1,4 +1,4 @@
-import { useInput, useSelect } from '@/hooks';
+import { useInput, useSelect } from '@/shared/hooks';
 import {
   Button,
   Card,
@@ -11,9 +11,9 @@ import {
   Select,
   Typography,
 } from '@material-tailwind/react';
-import { useAddStudentMutation, useEditStudentMutation } from '@/redux/services/firestoreApi';
+import { useAddStudentMutation, useEditStudentMutation } from '@/redux/firestoreApi';
 import { useEffect } from 'react';
-import { Student } from '@/model';
+import { Student } from '@/shared/model';
 
 interface StudentAddDialogProps extends Pick<DialogProps, 'open'> {
   handleDialog: () => void;

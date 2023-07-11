@@ -1,5 +1,5 @@
 import { db } from '@/firebase-config';
-import { Score, Student } from '@/model';
+import { Score, Student } from '@/shared/model';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   addDoc,

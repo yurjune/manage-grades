@@ -1,10 +1,10 @@
 import { CustomTabs, DashboardLayout } from '@/components';
-import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/constants';
-import { AuthProvider } from '@/context';
-import { useSelect } from '@/hooks';
-import { firestoreApi, useGetStudentsQuery } from '@/redux/services/firestoreApi';
+import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/shared/constants';
+import { AuthProvider } from '@/shared/context';
+import { useSelect } from '@/shared/hooks';
+import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { wrapper } from '@/redux/store';
-import { getAverageScoresOfSemester } from '@/utils';
+import { getAverageScoresOfSemester } from '@/shared/utils';
 import { Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 import { Bar } from 'react-chartjs-2';

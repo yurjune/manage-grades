@@ -1,6 +1,6 @@
-import { useInput, useSelect } from '@/hooks';
-import { Student } from '@/model';
-import { useAddScoresMutation } from '@/redux/services/firestoreApi';
+import { useInput, useSelect } from '@/shared/hooks';
+import { Student } from '@/shared/model';
+import { useAddScoresMutation } from '@/redux/firestoreApi';
 import {
   Button,
   Card,

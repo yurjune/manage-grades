@@ -1,4 +1,4 @@
-import { Student } from '@/model';
+import { Student } from '@/shared/model';
 import { openScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
 import { useAppDispatch } from '@/redux/hooks';
