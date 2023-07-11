@@ -39,7 +39,7 @@ export const Sidebar = () => {
       <div className='mb-2 p-4 flex items-center cursor-pointer'>
         <UserCircleIcon className='h-8 w-8 mr-3' />
         <Typography variant='h5' color='blue-gray'>
-          홍길동 선생님
+          최승제 선생님
         </Typography>
       </div>
       <List>

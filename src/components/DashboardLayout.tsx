@@ -14,7 +14,7 @@ export const DashboardLayout = ({ title, children }: PropsWithChildren<Dashboard
         <div className='flex flex-col flex-1'>
           <Header />
           <div className='p-6'>
-            <Typography variant='h4' className='mb-6 ml-1'>
+            <Typography variant='h4' className='mb-8 ml-1'>
               {title}
             </Typography>
             {children}
