@@ -2,9 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { firestoreApi } from './firestoreApi';
 import studentReducer from './features/student/studentSlice';
 import dialogsReducer from './features/dialogs/dialogsSlice';
-import { Context, createWrapper } from 'next-redux-wrapper';
+import { createWrapper } from 'next-redux-wrapper';
 
-export const makeStore = (context: Context) => {
+export const makeStore = () => {
   return configureStore({
     reducer: {
       student: studentReducer,
