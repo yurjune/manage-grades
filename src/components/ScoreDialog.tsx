@@ -39,7 +39,7 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
     setSemester(currentSemester);
     setMath(selectedStudent?.semesters?.[currentSemester].math.toString() ?? '');
     setEnglish(selectedStudent?.semesters?.[currentSemester].english.toString() ?? '');
-  }, [selectedStudent, currentSemester, setStudent, setSemester, setMath, setEnglish]);
+  }, [open, selectedStudent, currentSemester, setStudent, setSemester, setMath, setEnglish]);
 
   const candidates = students.map((student) => ({
     uid: student.uid,

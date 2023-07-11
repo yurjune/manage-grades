@@ -36,7 +36,7 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
     setGender(selectedStudent?.gender ?? '');
     setGrade(selectedStudent?.grade ?? '');
     setGroup(selectedStudent?.group ?? '');
-  }, [selectedStudent, setName, setGender, setGrade, setGroup]);
+  }, [open, selectedStudent, setName, setGender, setGrade, setGroup]);
 
   const handleSumbitClick = async () => {
     if ([name, gender, grade, group].some((val) => !val)) {
