@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 export const DashboardLayout = ({ title, children }: PropsWithChildren<DashboardLayoutProps>) => {
   return (
     <div className='w-full h-full'>
-      <main className='h-full my-0 mx-auto max-w-[100rem] flex'>
+      <main className='h-full my-0 mx-auto max-w-[90rem] flex'>
         <Sidebar />
         <div className='flex flex-col flex-1'>
           <Header />
