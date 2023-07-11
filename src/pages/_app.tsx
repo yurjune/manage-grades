@@ -2,6 +2,17 @@ import { AppPropsWithLayout } from '@/model';
 import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@material-tailwind/react';
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
