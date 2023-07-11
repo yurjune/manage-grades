@@ -1,4 +1,5 @@
 import { CustomTabs, DashboardLayout } from '@/components';
+import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/constants';
 import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/services/firestoreApi';
@@ -8,14 +9,8 @@ import { Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const TAB_FIELDS = [
-  { label: 'A반', value: 'A' },
-  { label: 'B반', value: 'B' },
-  { label: 'C반', value: 'C' },
-];
-const initialTabValue = TAB_FIELDS[0].value;
-const SEMESTER_FIELDS = ['23-1', '23-2'];
-const SUBJECT_FIELDS = ['국어', '수학', '영어', '과학'];
+const GROUP_FIELDS = _GROUP_FIELDS.slice(1);
+const initialTabValue = GROUP_FIELDS[0].value;
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: '' }));
@@ -72,7 +67,7 @@ export const StasticsPage = () => {
           </Select>
         </div>
         <div className='flex-1 ml-4'>
-          <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+          <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
         </div>
       </div>
       <div className='w-[90%] mx-auto'>{<Bar data={chartData} options={chartOptions} />}</div>

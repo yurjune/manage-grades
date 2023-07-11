@@ -1,5 +1,6 @@
 import { CustomTabs, DashboardLayout, StudentDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/StudentsTable';
+import { STUDENT_FIELDS, GROUP_FIELDS } from '@/constants';
 import { AuthProvider } from '@/context';
 import type { NextPageWithLayout } from '@/model';
 import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
@@ -10,14 +11,8 @@ import { wrapper } from '@/redux/store';
 import { Button } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-const TABLE_FIELDS = ['이름', '성별', '학년', '반', '수정/삭제'];
-const TAB_FIELDS = [
-  { label: '전체', value: '' },
-  { label: 'A반', value: 'A' },
-  { label: 'B반', value: 'B' },
-  { label: 'C반', value: 'C' },
-];
-const initialGroupValue = TAB_FIELDS[0].value;
+const TABLE_FIELDS = [...STUDENT_FIELDS, '수정/삭제'];
+const initialGroupValue = GROUP_FIELDS[0].value;
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: initialGroupValue }));
@@ -43,7 +38,7 @@ const Home: NextPageWithLayout = () => {
   return (
     <Fragment>
       <div className='mb-4'>
-        <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+        <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
       </div>
       <Table>
         <TableHead fields={TABLE_FIELDS} />

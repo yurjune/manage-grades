@@ -1,5 +1,6 @@
 import { CustomTabs, DashboardLayout, ScoreDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/SemestersTable';
+import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS } from '@/constants';
 import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
 import { NextPageWithLayout } from '@/model';
@@ -11,15 +12,8 @@ import { wrapper } from '@/redux/store';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-const TABLE_FIELDS = ['학기', '이름', '반', '국어', '수학', '영어', '과학', '수정'];
-const TAB_FIELDS = [
-  { label: '전체', value: '' },
-  { label: 'A반', value: 'A' },
-  { label: 'B반', value: 'B' },
-  { label: 'C반', value: 'C' },
-];
-const initialGroupValue = TAB_FIELDS[0].value;
-const SEMESTER_FIELDS = ['23-1', '23-2'];
+const TABLE_FIELDS = ['학기', '이름', '반', ...SUBJECT_FIELDS, '수정'];
+const initialGroupValue = GROUP_FIELDS[0].value;
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: initialGroupValue }));
@@ -61,7 +55,7 @@ const ScoresPage: NextPageWithLayout = () => {
           </Select>
         </div>
         <div className='flex-1 ml-4'>
-          <CustomTabs fields={TAB_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
+          <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
         </div>
       </div>
       <Table>
