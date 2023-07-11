@@ -76,7 +76,7 @@ export const StasticsPage = () => {
 };
 
 const chartOptions = {
-  maxBarThickness: 80,
+  maxBarThickness: 50,
   scales: {
     y: {
       max: 100,
