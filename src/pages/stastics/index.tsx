@@ -3,9 +3,9 @@ import { AuthProvider } from '@/context';
 import { useSelect } from '@/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/services/firestoreApi';
 import { wrapper } from '@/redux/store';
-import { getTotalScoresForCurrentSemester } from '@/utils';
+import { getAverageScoresForCurrentSemester } from '@/utils';
 import { Option, Select } from '@material-tailwind/react';
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode, useMemo, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 type TabValue = 'A' | 'B' | 'C';
@@ -30,9 +30,13 @@ export const StasticsPage = () => {
   const [tabValue, setTabValue] = useState('A');
   const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
   const { data: students = [] } = useGetStudentsQuery({ group: '' });
-  const scores = getTotalScoresForCurrentSemester(students, semester);
 
-  const data = {
+  const scores = useMemo(
+    () => getAverageScoresForCurrentSemester(students, semester),
+    [students, semester],
+  );
+
+  const chartData = {
     labels: SUBJECT_FIELDS,
     datasets: [
       {
@@ -72,13 +76,13 @@ export const StasticsPage = () => {
         </div>
       </div>
       <div className='w-[90%] mx-auto'>
-        <Bar data={data} options={options} />
+        <Bar data={chartData} options={chartOptions} />
       </div>
     </Fragment>
   );
 };
 
-export const options = {
+export const chartOptions = {
   maxBarThickness: 80,
   scales: {
     y: {
@@ -86,19 +90,19 @@ export const options = {
     },
   },
   plugins: {
+    title: {
+      display: true,
+      text: '과목 별 반 평균 점수 분포',
+      font: {
+        size: 18,
+      },
+    },
     legend: {
       position: 'bottom' as const,
       labels: {
         font: {
           size: 14,
         },
-      },
-    },
-    title: {
-      display: true,
-      text: '과목 별 반 평균 점수 분포',
-      font: {
-        size: 18,
       },
     },
   },

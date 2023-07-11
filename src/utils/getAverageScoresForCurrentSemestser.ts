@@ -1,6 +1,6 @@
 import { Score, Student } from '@/model';
 
-type TotalScores = {
+type AverageScores = {
   total: Score;
   A: Score;
   B: Score;
@@ -8,10 +8,10 @@ type TotalScores = {
 };
 
 // TODO: Group, 과목 확장 가능하도록 수정
-export const getTotalScoresForCurrentSemester = (
+export const getAverageScoresForCurrentSemester = (
   students: Student[],
   currentSemester: string,
-): TotalScores => {
+): AverageScores => {
   const semesterOfA = collectCurrentSemestersOfEachGroup(students, 'A', currentSemester);
   const semesterOfB = collectCurrentSemestersOfEachGroup(students, 'B', currentSemester);
   const semesterOfC = collectCurrentSemestersOfEachGroup(students, 'C', currentSemester);

@@ -1,1 +1,1 @@
-export * from './getTotalScoresForCurrentSemestser';
+export * from './getAverageScoresForCurrentSemestser';
