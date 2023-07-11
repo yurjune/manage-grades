@@ -1,5 +1,5 @@
 import { db } from '@/firebase-config';
-import { Student } from '@/model';
+import { Score, Student } from '@/model';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   addDoc,
@@ -102,8 +102,10 @@ export const firestoreApi = createApi({
           const ref = doc(db, 'students', args.uid);
           await updateDoc(ref, {
             [`semesters.${args.semester}`]: {
+              korean: args.korean,
               math: args.math,
               english: args.english,
+              science: args.science,
             },
           });
           return { data: null };
@@ -119,9 +121,7 @@ export const firestoreApi = createApi({
 type AddScoresArgs = {
   uid: string;
   semester: string;
-  math: number;
-  english: number;
-};
+} & Score;
 
 export const {
   useGetStudentsQuery,

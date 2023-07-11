@@ -15,7 +15,7 @@ const TAB_FIELDS = [
 ];
 const initialTabValue = TAB_FIELDS[0].value;
 const SEMESTER_FIELDS = ['23-1', '23-2'];
-const SUBJECT_FIELDS = ['수학', '영어'];
+const SUBJECT_FIELDS = ['국어', '수학', '영어', '과학'];
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   store.dispatch(firestoreApi.endpoints.getStudents.initiate({ group: '' }));

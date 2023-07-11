@@ -11,6 +11,12 @@ interface TableBodyProps {
   semester: string;
 }
 
+const defaultScore = {
+  korean: '-',
+  math: '-',
+  english: '-',
+  science: '-',
+};
 export const TableBody = ({ rows, semester }: TableBodyProps) => {
   const dispatch = useAppDispatch();
   const filteredRows = rows.filter((item) => item?.semesters?.[semester]);
@@ -25,7 +31,7 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
       <tbody>
         {filteredRows.map((student, index) => {
           const { uid, name, group, semesters } = student;
-          const { english, math } = semesters ? semesters[semester] : { english: '-', math: '-' };
+          const { korean, math, english, science } = semesters ? semesters[semester] : defaultScore;
           const isLast = index === rows.length - 1;
           const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
@@ -48,12 +54,22 @@ export const TableBody = ({ rows, semester }: TableBodyProps) => {
               </td>
               <td className={classes}>
                 <Typography variant='small' color='blue-gray' className='font-normal'>
-                  {english}
+                  {korean}
                 </Typography>
               </td>
               <td className={classes}>
                 <Typography variant='small' color='blue-gray' className='font-normal'>
                   {math}
+                </Typography>
+              </td>
+              <td className={classes}>
+                <Typography variant='small' color='blue-gray' className='font-normal'>
+                  {english}
+                </Typography>
+              </td>
+              <td className={classes}>
+                <Typography variant='small' color='blue-gray' className='font-normal'>
+                  {science}
                 </Typography>
               </td>
               <td className={`${classes} w-[120px]`}>

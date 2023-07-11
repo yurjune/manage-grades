@@ -11,7 +11,7 @@ import { wrapper } from '@/redux/store';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-const TABLE_FIELDS = ['학기', '이름', '반', '영어', '수학', '수정'];
+const TABLE_FIELDS = ['학기', '이름', '반', '국어', '수학', '영어', '과학', '수정'];
 const TAB_FIELDS = [
   { label: '전체', value: '' },
   { label: 'A반', value: 'A' },
