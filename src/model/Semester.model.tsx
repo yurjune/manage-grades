@@ -1,6 +1,8 @@
-export type Semester = {
-  [index: string]: {
-    english: number;
-    math: number;
-  };
+export type Score = {
+  math: number;
+  english: number;
+};
+
+export type Semesters = {
+  [index: string]: Score;
 };

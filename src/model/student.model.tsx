@@ -1,4 +1,4 @@
-import { Semester } from './Semester.model';
+import { Semesters } from './Semester.model';
 
 export type Student = {
   name: string;
@@ -6,5 +6,5 @@ export type Student = {
   group: string;
   gender: string;
   uid: string;
-  semesters?: Semester;
+  semesters?: Semesters;
 };
