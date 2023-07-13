@@ -24,30 +24,35 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
   const { open, handleDialog, selectedStudent } = props;
   const [addStudent] = useAddStudentMutation();
   const [editStudent] = useEditStudentMutation();
-
-  const [name, handleNameChange, setName] = useInput('');
-  const [gender, handleGenderChange, setGender] = useSelect('');
-  const [grade, handleGradeChange, setGrade] = useSelect('');
-  const [group, handleGroupChange, setGroup] = useSelect('');
   const editMode = selectedStudent;
 
+  const [inputValues, handleInputValues, setInputValues] = useInput({ name: '' });
+  const [selectValues, handleSelectValues, setSelectValues] = useSelect({
+    gender: '',
+    grade: '',
+    group: '',
+  });
+
   useEffect(() => {
-    setName(selectedStudent?.name ?? '');
-    setGender(selectedStudent?.gender ?? '');
-    setGrade(selectedStudent?.grade ?? '');
-    setGroup(selectedStudent?.group ?? '');
-  }, [open, selectedStudent, setName, setGender, setGrade, setGroup]);
+    setInputValues({ name: selectedStudent?.name ?? '' });
+    setSelectValues({
+      gender: selectedStudent?.gender ?? '',
+      grade: selectedStudent?.grade ?? '',
+      group: selectedStudent?.group ?? '',
+    });
+  }, [open, selectedStudent, setInputValues, setSelectValues]);
 
   const handleSumbitClick = async () => {
-    if ([name, gender, grade, group].some((val) => !val)) {
+    if (Object.values({ ...inputValues, ...selectValues }).some((field) => !field)) {
       return;
     }
 
-    const formValues = { name, gender, grade, group };
+    const { name } = inputValues;
+    const { gender, grade, group } = selectValues;
     if (editMode) {
-      await editStudent({ ...selectedStudent, ...formValues });
+      await editStudent({ name, gender, grade, group, uid: selectedStudent.uid });
     } else {
-      await addStudent({ ...formValues });
+      await addStudent({ name, gender, grade, group });
     }
 
     handleDialog();
@@ -61,22 +66,32 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
             <Typography variant='h4' color='black'>
               {editMode ? '학생 수정' : '학생 추가'}
             </Typography>
-            <Input label='이름' size='lg' value={name} onChange={handleNameChange} />
-            <Select label='성별' value={gender} onChange={handleGenderChange}>
+            <Input
+              label='이름'
+              name='name'
+              size='lg'
+              value={inputValues.name}
+              onChange={handleInputValues}
+            />
+            <Select
+              label='성별'
+              value={selectValues.gender}
+              onChange={handleSelectValues('gender')}
+            >
               {['남', '여'].map((val) => (
                 <Option key={val} value={val}>
                   {val}
                 </Option>
               ))}
             </Select>
-            <Select label='학년' value={grade} onChange={handleGradeChange}>
+            <Select label='학년' value={selectValues.grade} onChange={handleSelectValues('grade')}>
               {['1', '2', '3'].map((val) => (
                 <Option key={val} value={val}>
                   {val}
                 </Option>
               ))}
             </Select>
-            <Select label='반' value={group} onChange={handleGroupChange}>
+            <Select label='반' value={selectValues.group} onChange={handleSelectValues('group')}>
               {['A', 'B', 'C'].map((val) => (
                 <Option key={val} value={val}>
                   {val}

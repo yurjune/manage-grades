@@ -1,9 +1,8 @@
 import { CustomTabs, DashboardLayout } from '@/components';
-import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/shared/constants';
-import { AuthProvider } from '@/shared/context';
-import { useSelect } from '@/shared/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { wrapper } from '@/redux/store';
+import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/shared/constants';
+import { AuthProvider } from '@/shared/context';
 import { getAverageScoresOfSemester } from '@/shared/utils';
 import { Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
@@ -24,7 +23,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 
 export const StasticsPage = () => {
   const [tabValue, setTabValue] = useState(initialTabValue);
-  const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
+  const [semester, setSemester] = useState(SEMESTER_FIELDS[0]);
   const { data: totalStudents = [] } = useGetStudentsQuery({ group: '' });
   const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
 
@@ -56,7 +55,7 @@ export const StasticsPage = () => {
           <Select
             label='학기'
             value={semester}
-            onChange={handleSemesterChange}
+            onChange={(val) => setSemester(val ?? '')}
             className='bg-white'
           >
             {SEMESTER_FIELDS.map((val) => (

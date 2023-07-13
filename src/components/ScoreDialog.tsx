@@ -26,45 +26,53 @@ interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
 export const ScoreDialog = (props: ScoreDialogProps) => {
   const { open, handleDialog, students, semesters, selectedStudent, currentSemester } = props;
   const [addScores] = useAddScoresMutation();
-
-  const [semester, handleSemesterChange, setSemester] = useSelect('');
-  const [student, handleStudentChange, setStudent] = useSelect('');
-  const [korean, handleKoreanChange, setKorean] = useInput('');
-  const [math, handleMathChange, setMath] = useInput('');
-  const [english, handleEnglishChange, setEnglish] = useInput('');
-  const [science, handleScienceChange, setScience] = useInput('');
   const editMode = Boolean(selectedStudent);
 
-  // TODO: 로직 개선
-  useEffect(() => {
-    setStudent(selectedStudent?.uid ?? '');
-    setSemester(currentSemester);
-
-    setKorean(selectedStudent?.semesters?.[currentSemester].korean?.toString() ?? '');
-    setMath(selectedStudent?.semesters?.[currentSemester].math?.toString() ?? '');
-    setEnglish(selectedStudent?.semesters?.[currentSemester].english?.toString() ?? '');
-    setScience(selectedStudent?.semesters?.[currentSemester].science?.toString() ?? '');
-  }, [
-    open,
-    selectedStudent,
-    currentSemester,
-    setStudent,
-    setSemester,
-    setKorean,
-    setMath,
-    setEnglish,
-    setScience,
-  ]);
+  const [info, handleInfo, setInfo] = useSelect({
+    student: '',
+    semester: '',
+  });
+  const [scores, handleScores, setScores] = useInput({
+    korean: '',
+    math: '',
+    english: '',
+    science: '',
+  });
 
   const candidates = students.map((student) => ({
     uid: student.uid,
     nameWithGroup: `${student.name} (반: ${student.group})`,
   }));
 
-  const handleSubmit = async () => {
-    if ([student, semester, korean, math, english, science].some((val) => !val)) return;
-    if ([korean, math, english, science].some((val) => !Number.isInteger(Number(val)))) return;
+  useEffect(() => {
+    setInfo({
+      student: selectedStudent?.uid ?? '',
+      semester: currentSemester,
+    });
 
+    const exScores = selectedStudent?.semesters?.[currentSemester];
+    if (exScores) {
+      setScores({
+        korean: exScores.korean.toString(),
+        math: exScores.math.toString(),
+        english: exScores.english.toString(),
+        science: exScores.science.toString(),
+      });
+    } else {
+      setScores({ korean: '', math: '', english: '', science: '' });
+    }
+  }, [open, selectedStudent, currentSemester, setInfo, setScores]);
+
+  const handleSubmit = async () => {
+    if (
+      Object.values({ ...info }).some((field) => !field) ||
+      Object.values({ ...scores }).some((field) => !field || !Number.isInteger(Number(field)))
+    ) {
+      return;
+    }
+
+    const { student, semester } = info;
+    const { korean, math, english, science } = scores;
     await addScores({
       uid: student,
       semester,
@@ -87,8 +95,8 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
             </Typography>
             <Select
               label='학기'
-              value={semester}
-              onChange={handleSemesterChange}
+              value={info.semester}
+              onChange={handleInfo('semester')}
               disabled={editMode}
             >
               {semesters.map((semester) => (
@@ -97,17 +105,40 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
                 </Option>
               ))}
             </Select>
-            <Select label='학생' value={student} onChange={handleStudentChange} disabled={editMode}>
+            <Select
+              label='학생'
+              value={info.student}
+              onChange={handleInfo('student')}
+              disabled={editMode}
+            >
               {candidates.map((candidate) => (
                 <Option key={candidate.uid} value={candidate.uid}>
                   {candidate.nameWithGroup}
                 </Option>
               ))}
             </Select>
-            <Input label='국어' size='lg' value={korean} onChange={handleKoreanChange} />
-            <Input label='영어' size='lg' value={english} onChange={handleEnglishChange} />
-            <Input label='수학' size='lg' value={math} onChange={handleMathChange} />
-            <Input label='과학' size='lg' value={science} onChange={handleScienceChange} />
+            <Input
+              label='국어'
+              size='lg'
+              name='korean'
+              value={scores.korean}
+              onChange={handleScores}
+            />
+            <Input label='수학' size='lg' name='math' value={scores.math} onChange={handleScores} />
+            <Input
+              label='영어'
+              size='lg'
+              name='english'
+              value={scores.english}
+              onChange={handleScores}
+            />
+            <Input
+              label='과학'
+              size='lg'
+              name='science'
+              value={scores.science}
+              onChange={handleScores}
+            />
           </CardBody>
         </form>
         <CardFooter className='pt-0'>

@@ -1,14 +1,13 @@
 import { CustomTabs, DashboardLayout, ScoreDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/SemestersTable';
-import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS } from '@/shared/constants';
-import { AuthProvider } from '@/shared/context';
-import { useSelect } from '@/shared/hooks';
-import { NextPageWithLayout } from '@/shared/model';
 import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { wrapper } from '@/redux/store';
+import { GROUP_FIELDS, SEMESTER_FIELDS, SUBJECT_FIELDS } from '@/shared/constants';
+import { AuthProvider } from '@/shared/context';
+import { NextPageWithLayout } from '@/shared/model';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
@@ -26,7 +25,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 
 const ScoresPage: NextPageWithLayout = () => {
   const [tabValue, setTabValue] = useState(initialGroupValue);
-  const [semester, handleSemesterChange] = useSelect(SEMESTER_FIELDS[0]);
+  const [semester, setSemester] = useState(SEMESTER_FIELDS[0]);
   const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
   const open = useAppSelector((state) => state.dialogs.scoreDialogOpen);
   const selectedStudent = useAppSelector((state) => state.student.value);
@@ -44,7 +43,7 @@ const ScoresPage: NextPageWithLayout = () => {
           <Select
             label='학기'
             value={semester}
-            onChange={handleSemesterChange}
+            onChange={(val) => setSemester(val ?? '')}
             className='bg-white'
           >
             {SEMESTER_FIELDS.map((val) => (
