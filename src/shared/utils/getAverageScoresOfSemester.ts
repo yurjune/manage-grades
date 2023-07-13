@@ -1,12 +1,15 @@
-import { Score, Student } from '@/shared/model';
+import { Score, Semesters, Student } from '@/shared/model';
+
+type studentWithGivenSemester = Student & {
+  semesters: Semesters;
+};
 
 export const getAverageScoresOfSemester = (students: Student[], semester: string): Score | null => {
   const semesters = students
-    .filter((student) => student.semesters?.[semester])
-    .map((student) => student.semesters?.[semester]);
+    .filter((stu): stu is studentWithGivenSemester => Boolean(stu.semesters?.[semester]))
+    .map((stu) => stu.semesters[semester]);
 
-  // TODO: get rid of type assertion
-  return semesters.length !== 0 ? calculateAverageScores(semesters as Score[]) : null;
+  return semesters.length !== 0 ? calculateAverageScores(semesters) : null;
 };
 
 const calculateAverageScores = (semesters: Score[]): Score => {
