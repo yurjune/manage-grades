@@ -1,18 +1,17 @@
+import { useAddStudentMutation, useEditStudentMutation } from '@/redux/firestoreApi';
+import { Student } from '@/shared/model';
 import {
   Button,
   Card,
   CardBody,
   CardFooter,
   Dialog,
-  DialogProps,
   Input,
   Option,
   Select,
   Typography,
+  type DialogProps,
 } from '@material-tailwind/react';
-import { useAddStudentMutation, useEditStudentMutation } from '@/redux/firestoreApi';
-import { useEffect } from 'react';
-import { Student } from '@/shared/model';
 import { Controller, useForm } from 'react-hook-form';
 
 interface StudentAddDialogProps extends Pick<DialogProps, 'open'> {
@@ -26,29 +25,23 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
   const { open, handleDialog, selectedStudent } = props;
   const [addStudent] = useAddStudentMutation();
   const [editStudent] = useEditStudentMutation();
-  const editMode = selectedStudent;
-  const { register, handleSubmit, control, setValue, reset } = useForm<FormValue>();
-
-  useEffect(() => {
-    if (selectedStudent == null) {
-      reset();
-    } else {
-      setValue('name', selectedStudent.name);
-      setValue('gender', selectedStudent.gender);
-      setValue('grade', selectedStudent.grade);
-      setValue('group', selectedStudent.group);
-    }
-  }, [open, selectedStudent, setValue, reset]);
+  const { register, handleSubmit, control, reset } = useForm<FormValue>({
+    values: {
+      name: selectedStudent?.name ?? '',
+      gender: selectedStudent?.gender ?? '',
+      grade: selectedStudent?.grade ?? '',
+      group: selectedStudent?.group ?? '',
+    },
+  });
 
   const handleSumbitClick = async (values: FormValue) => {
-    const { name, gender, grade, group } = values;
-
-    if (editMode) {
-      await editStudent({ name, gender, grade, group, uid: selectedStudent.uid });
+    if (selectedStudent) {
+      await editStudent({ ...values, uid: selectedStudent.uid });
     } else {
-      await addStudent({ name, gender, grade, group });
+      await addStudent({ ...values });
     }
 
+    reset();
     handleDialog();
   };
 
@@ -58,7 +51,7 @@ export const StudentDialog = (props: StudentAddDialogProps) => {
         <form>
           <CardBody className='flex flex-col gap-8'>
             <Typography variant='h4' color='black'>
-              {editMode ? '학생 수정' : '학생 추가'}
+              {selectedStudent ? '학생 수정' : '학생 추가'}
             </Typography>
             <Input {...register('name', { required: true })} label='이름' size='lg' />
             <Controller
