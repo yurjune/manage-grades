@@ -1,6 +1,5 @@
-import { useInput, useSelect } from '@/shared/hooks';
-import { Student } from '@/shared/model';
 import { useAddScoresMutation } from '@/redux/firestoreApi';
+import { Score, Student } from '@/shared/model';
 import {
   Button,
   Card,
@@ -13,7 +12,14 @@ import {
   Select,
   Typography,
 } from '@material-tailwind/react';
-import { useEffect } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
+type UndefinedScore = {
+  [key in keyof Score]: Score[key] | undefined;
+};
+type FormValue<T extends Score | UndefinedScore> = { uid: string; semester: string } & T;
+type InitialFormValue = FormValue<UndefinedScore>;
+type ValidFormValue = FormValue<Score>;
 
 interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
   handleDialog: () => void;
@@ -27,122 +33,86 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   const { open, handleDialog, students, semesters, selectedStudent, currentSemester } = props;
   const [addScores] = useAddScoresMutation();
   const editMode = Boolean(selectedStudent);
+  const exScores = selectedStudent?.semesters?.[currentSemester];
 
-  const [info, handleInfo, setInfo] = useSelect({
-    student: '',
-    semester: '',
+  const { register, control, handleSubmit, reset } = useForm<InitialFormValue>({
+    values: {
+      semester: currentSemester,
+      uid: selectedStudent?.uid ?? '',
+      korean: exScores?.korean,
+      math: exScores?.math,
+      english: exScores?.english,
+      science: exScores?.science,
+    },
   });
-  const [scores, handleScores, setScores] = useInput({
-    korean: '',
-    math: '',
-    english: '',
-    science: '',
-  });
+
+  const handleFormSubmit: SubmitHandler<InitialFormValue> = async (values) => {
+    const { korean, english, math, science } = values;
+    const scores = { korean, english, math, science };
+
+    if (Object.values(scores).some((score) => !score || isNaN(score))) return;
+
+    await addScores(values as ValidFormValue);
+    handleDialog();
+    reset();
+  };
 
   const candidates = students.map((student) => ({
     uid: student.uid,
     nameWithGroup: `${student.name} (반: ${student.group})`,
   }));
 
-  useEffect(() => {
-    setInfo({
-      student: selectedStudent?.uid ?? '',
-      semester: currentSemester,
-    });
-
-    const exScores = selectedStudent?.semesters?.[currentSemester];
-    if (exScores) {
-      setScores({
-        korean: exScores.korean.toString(),
-        math: exScores.math.toString(),
-        english: exScores.english.toString(),
-        science: exScores.science.toString(),
-      });
-    } else {
-      setScores({ korean: '', math: '', english: '', science: '' });
-    }
-  }, [open, selectedStudent, currentSemester, setInfo, setScores]);
-
-  const handleSubmit = async () => {
-    if (
-      Object.values({ ...info }).some((field) => !field) ||
-      Object.values({ ...scores }).some((field) => !field || !Number.isInteger(Number(field)))
-    ) {
-      return;
-    }
-
-    const { student, semester } = info;
-    const { korean, math, english, science } = scores;
-    await addScores({
-      uid: student,
-      semester,
-      korean: Number(korean),
-      math: Number(math),
-      english: Number(english),
-      science: Number(science),
-    });
-
-    handleDialog();
-  };
+  const selectRules = { required: true };
+  const scoreRules = { required: true, valueAsNumber: true, min: 0, max: 100 };
 
   return (
     <Dialog size='sm' open={open} handler={handleDialog} className='bg-transparent shadow-none'>
       <Card className='mx-auto w-full'>
-        <form>
-          <CardBody className='flex flex-col gap-8'>
-            <Typography variant='h4' color='black'>
-              성적 추가
-            </Typography>
-            <Select
-              label='학기'
-              value={info.semester}
-              onChange={handleInfo('semester')}
-              disabled={editMode}
-            >
-              {semesters.map((semester) => (
-                <Option key={semester} value={semester}>
-                  {semester}
-                </Option>
-              ))}
-            </Select>
-            <Select
-              label='학생'
-              value={info.student}
-              onChange={handleInfo('student')}
-              disabled={editMode}
-            >
-              {candidates.map((candidate) => (
-                <Option key={candidate.uid} value={candidate.uid}>
-                  {candidate.nameWithGroup}
-                </Option>
-              ))}
-            </Select>
-            <Input
-              label='국어'
-              size='lg'
-              name='korean'
-              value={scores.korean}
-              onChange={handleScores}
+        <CardBody>
+          <Typography variant='h4' color='black' className='mb-8'>
+            성적 추가
+          </Typography>
+          <form className='flex flex-col gap-8'>
+            <Controller
+              name='semester'
+              control={control}
+              rules={selectRules}
+              render={({ field }) => (
+                <Select {...field} label='학기' disabled={editMode}>
+                  {semesters.map((semester) => (
+                    <Option key={semester} value={semester}>
+                      {semester}
+                    </Option>
+                  ))}
+                </Select>
+              )}
             />
-            <Input label='수학' size='lg' name='math' value={scores.math} onChange={handleScores} />
-            <Input
-              label='영어'
-              size='lg'
-              name='english'
-              value={scores.english}
-              onChange={handleScores}
+            <Controller
+              name='uid'
+              control={control}
+              rules={selectRules}
+              render={({ field }) => (
+                <Select {...field} label='학생' disabled={editMode}>
+                  {candidates.map((candidate) => (
+                    <Option key={candidate.uid} value={candidate.uid}>
+                      {candidate.nameWithGroup}
+                    </Option>
+                  ))}
+                </Select>
+              )}
             />
-            <Input
-              label='과학'
-              size='lg'
-              name='science'
-              value={scores.science}
-              onChange={handleScores}
-            />
-          </CardBody>
-        </form>
+            <Input {...register('korean', scoreRules)} type='number' label='국어' size='lg' />
+            <Input {...register('english', scoreRules)} type='number' label='영어' size='lg' />
+            <Input {...register('math', scoreRules)} type='number' label='수학' size='lg' />
+            <Input {...register('science', scoreRules)} type='number' label='과학' size='lg' />
+          </form>
+        </CardBody>
         <CardFooter className='pt-0'>
-          <Button variant='gradient' fullWidth onClick={handleSubmit}>
+          <Button
+            variant='gradient'
+            onClick={handleSubmit(handleFormSubmit)}
+            className='float-right'
+          >
             등록
           </Button>
         </CardFooter>
