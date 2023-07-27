@@ -10,7 +10,7 @@ import {
   type DialogProps,
 } from '@material-tailwind/react';
 import { useForm } from 'react-hook-form';
-import { InputField, SelectField } from './ControlledFields';
+import { InputField, SelectField } from './CustomFields';
 
 const NAME = 'name';
 const GENDER = 'gender';
@@ -27,7 +27,7 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
   const [addStudent] = useAddStudentMutation();
   const [editStudent] = useEditStudentMutation();
 
-  const { handleSubmit, control, reset } = useForm<FormValue>({
+  const { register, handleSubmit, control, reset, formState } = useForm<FormValue>({
     values: {
       name: selectedStudent?.name ?? '',
       gender: selectedStudent?.gender ?? '',
@@ -57,9 +57,8 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
           </Typography>
           <form className='flex flex-col gap-6'>
             <InputField
-              control={control}
-              name={NAME}
-              rules={required}
+              {...register(NAME, required)}
+              formState={formState}
               inputProps={{ label: '이름', size: 'lg' }}
             />
             <SelectField

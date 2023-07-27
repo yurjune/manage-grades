@@ -12,14 +12,10 @@ import {
   Typography,
 } from '@material-tailwind/react';
 import { Controller, useForm } from 'react-hook-form';
-import { InputField, SelectField } from './ControlledFields';
+import { InputField, SelectField } from './CustomFields';
+import { ErrorMessage } from './ErrorMessage';
 
-type UndefinedScore = {
-  [key in keyof Score]: Score[key] | undefined;
-};
-type FormValue<T extends Score | UndefinedScore> = { uid: string; semester: string } & T;
-type InitialFormValue = FormValue<UndefinedScore>;
-type ValidFormValue = FormValue<Score>;
+type FormValue = { uid: string; semester: string } & Score;
 
 interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
   handleDialog: () => void;
@@ -35,26 +31,32 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   const editMode = Boolean(selectedStudent);
   const exScores = selectedStudent?.semesters?.[currentSemester];
 
-  const { control, handleSubmit, reset } = useForm<InitialFormValue>({
+  const { control, handleSubmit, reset, formState, register } = useForm<FormValue>({
     values: {
       semester: currentSemester,
       uid: selectedStudent?.uid ?? '',
-      korean: exScores?.korean,
-      math: exScores?.math,
-      english: exScores?.english,
-      science: exScores?.science,
+      korean: exScores?.korean ?? 0,
+      math: exScores?.math ?? 0,
+      english: exScores?.english ?? 0,
+      science: exScores?.science ?? 0,
     },
   });
 
   const handleFormSubmit = handleSubmit(async (values) => {
-    const { korean, english, math, science } = values;
-    const scores = { korean, english, math, science };
+    try {
+      const { korean, english, math, science } = values;
+      const scores = Object.values({ korean, english, math, science });
 
-    if (Object.values(scores).some((score) => !score || isNaN(score))) return;
+      if (scores.some((score) => typeof score !== 'number' || isNaN(score))) {
+        throw new Error('Some scores are not a Number!');
+      }
 
-    await addScores(values as ValidFormValue);
-    handleDialog();
-    reset();
+      await addScores(values);
+      handleDialog();
+      reset();
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   const candidates = students.map((student) => ({
@@ -63,7 +65,12 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   }));
 
   const selectRules = { required: '값을 입력해 주세요!' };
-  const scoreRules = { required: '값을 입력해 주세요!', valueAsNumber: true, min: 0, max: 100 };
+  const scoreRules = {
+    required: '값을 입력해 주세요!',
+    min: { value: 0, message: '0 이상의 값을 입력해 주세요!' },
+    max: { value: 100, message: '100 이하의 값을 입력해 주세요!' },
+    valueAsNumber: true,
+  };
 
   return (
     <Dialog size='sm' open={open} handler={handleDialog} className='bg-transparent shadow-none'>
@@ -85,38 +92,37 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
               control={control}
               rules={selectRules}
               render={({ field }) => (
-                <Select {...field} label='학생' disabled={editMode}>
-                  {candidates.map((candidate) => (
-                    <Option key={candidate.uid} value={candidate.uid}>
-                      {candidate.nameWithGroup}
-                    </Option>
-                  ))}
-                </Select>
+                <div className={`flex flex-col gap-2`}>
+                  <Select {...field} label='학생' disabled={editMode}>
+                    {candidates.map((candidate) => (
+                      <Option key={candidate.uid} value={candidate.uid}>
+                        {candidate.nameWithGroup}
+                      </Option>
+                    ))}
+                  </Select>
+                  <ErrorMessage name='uid' errors={formState.errors} />
+                </div>
               )}
             />
             <InputField
-              name='korean'
-              control={control}
-              rules={scoreRules}
-              inputProps={{ label: '국어', size: 'lg' }}
+              {...register('korean', scoreRules)}
+              formState={formState}
+              inputProps={{ label: '국어', size: 'lg', type: 'number' }}
             />
             <InputField
-              name='english'
-              control={control}
-              rules={scoreRules}
-              inputProps={{ label: '영어', size: 'lg' }}
+              {...register('english', scoreRules)}
+              formState={formState}
+              inputProps={{ label: '영어', size: 'lg', type: 'number' }}
             />
             <InputField
-              name='math'
-              control={control}
-              rules={scoreRules}
-              inputProps={{ label: '수학', size: 'lg' }}
+              {...register('math', scoreRules)}
+              formState={formState}
+              inputProps={{ label: '수학', size: 'lg', type: 'number' }}
             />
             <InputField
-              name='science'
-              control={control}
-              rules={scoreRules}
-              inputProps={{ label: '과학', size: 'lg' }}
+              {...register('science', scoreRules)}
+              formState={formState}
+              inputProps={{ label: '과학', size: 'lg', type: 'number' }}
             />
           </form>
         </CardBody>

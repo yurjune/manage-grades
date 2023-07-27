@@ -4,16 +4,15 @@ import { ErrorMessage } from '../ErrorMessage';
 
 type SelectFieldProps<T extends FieldValues> = UseControllerProps<T> & {
   options: string[];
-  selectProps: Omit<SelectProps, 'children' | 'ref'>;
-  gap?: number;
+  selectProps?: Omit<SelectProps, 'children' | 'ref'>;
 };
 
 export const SelectField = <T extends FieldValues>(props: SelectFieldProps<T>) => {
-  const { name, control, rules, options, selectProps, gap = 2 } = props;
+  const { name, control, rules, options, selectProps } = props;
   const { field, formState } = useController({ control, name, rules });
 
   return (
-    <div className={`flex flex-col gap-${gap}`}>
+    <div className='flex flex-col gap-2'>
       <Select {...field} {...selectProps}>
         {options.map((val) => (
           <Option key={val} value={val}>
