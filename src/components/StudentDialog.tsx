@@ -66,7 +66,7 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
               control={control}
               name={GENDER}
               rules={required}
-              options={['남', '녀']}
+              options={['남', '여']}
               selectProps={{ label: '성별' }}
             />
             <SelectField

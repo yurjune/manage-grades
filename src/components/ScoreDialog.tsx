@@ -7,12 +7,12 @@ import {
   CardFooter,
   Dialog,
   DialogProps,
-  Input,
   Option,
   Select,
   Typography,
 } from '@material-tailwind/react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { InputField, SelectField } from './ControlledFields';
 
 type UndefinedScore = {
   [key in keyof Score]: Score[key] | undefined;
@@ -35,7 +35,7 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   const editMode = Boolean(selectedStudent);
   const exScores = selectedStudent?.semesters?.[currentSemester];
 
-  const { register, control, handleSubmit, reset } = useForm<InitialFormValue>({
+  const { control, handleSubmit, reset } = useForm<InitialFormValue>({
     values: {
       semester: currentSemester,
       uid: selectedStudent?.uid ?? '',
@@ -46,7 +46,7 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
     },
   });
 
-  const handleFormSubmit: SubmitHandler<InitialFormValue> = async (values) => {
+  const handleFormSubmit = handleSubmit(async (values) => {
     const { korean, english, math, science } = values;
     const scores = { korean, english, math, science };
 
@@ -55,15 +55,15 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
     await addScores(values as ValidFormValue);
     handleDialog();
     reset();
-  };
+  });
 
   const candidates = students.map((student) => ({
     uid: student.uid,
     nameWithGroup: `${student.name} (반: ${student.group})`,
   }));
 
-  const selectRules = { required: true };
-  const scoreRules = { required: true, valueAsNumber: true, min: 0, max: 100 };
+  const selectRules = { required: '값을 입력해 주세요!' };
+  const scoreRules = { required: '값을 입력해 주세요!', valueAsNumber: true, min: 0, max: 100 };
 
   return (
     <Dialog size='sm' open={open} handler={handleDialog} className='bg-transparent shadow-none'>
@@ -73,19 +73,12 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
             성적 추가
           </Typography>
           <form className='flex flex-col gap-8'>
-            <Controller
+            <SelectField
               name='semester'
               control={control}
               rules={selectRules}
-              render={({ field }) => (
-                <Select {...field} label='학기' disabled={editMode}>
-                  {semesters.map((semester) => (
-                    <Option key={semester} value={semester}>
-                      {semester}
-                    </Option>
-                  ))}
-                </Select>
-              )}
+              selectProps={{ label: '학기' }}
+              options={semesters}
             />
             <Controller
               name='uid'
@@ -101,18 +94,34 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
                 </Select>
               )}
             />
-            <Input {...register('korean', scoreRules)} type='number' label='국어' size='lg' />
-            <Input {...register('english', scoreRules)} type='number' label='영어' size='lg' />
-            <Input {...register('math', scoreRules)} type='number' label='수학' size='lg' />
-            <Input {...register('science', scoreRules)} type='number' label='과학' size='lg' />
+            <InputField
+              name='korean'
+              control={control}
+              rules={scoreRules}
+              inputProps={{ label: '국어', size: 'lg' }}
+            />
+            <InputField
+              name='english'
+              control={control}
+              rules={scoreRules}
+              inputProps={{ label: '영어', size: 'lg' }}
+            />
+            <InputField
+              name='math'
+              control={control}
+              rules={scoreRules}
+              inputProps={{ label: '수학', size: 'lg' }}
+            />
+            <InputField
+              name='science'
+              control={control}
+              rules={scoreRules}
+              inputProps={{ label: '과학', size: 'lg' }}
+            />
           </form>
         </CardBody>
         <CardFooter className='pt-0'>
-          <Button
-            variant='gradient'
-            onClick={handleSubmit(handleFormSubmit)}
-            className='float-right'
-          >
+          <Button variant='gradient' onClick={handleFormSubmit} className='float-right'>
             등록
           </Button>
         </CardFooter>
