@@ -9,3 +9,4 @@ export * from './CustomTabs';
 export * from './ScoreDialog';
 export * from './LoadingView';
 export * from './ErrorMessage';
+export * from './Toaster';

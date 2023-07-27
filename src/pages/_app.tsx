@@ -1,15 +1,16 @@
-import { AppPropsWithLayout } from '@/shared/model';
+import { Toaster } from '@/components';
 import { wrapper } from '@/redux/store';
+import { AppPropsWithLayout } from '@/shared/model';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@material-tailwind/react';
 import {
-  Chart as ChartJS,
   BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
@@ -20,6 +21,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ThemeProvider value={customTheme}>
       <Component {...pageProps} />
+      <Toaster />
     </ThemeProvider>,
   );
 }

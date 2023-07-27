@@ -5,6 +5,7 @@ import { NextPageWithLayout } from '@/shared/model';
 import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
 import { ReactNode, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 type LoginFormValue = {
   email: string;
@@ -22,7 +23,9 @@ const SigninPage: NextPageWithLayout = () => {
     login(env.TEST_EMAIL, env.TEST_PW);
   };
 
-  const onSubmit = handleSubmit((values) => {});
+  const onSubmit = handleSubmit(() => {
+    toast.error('회원 정보가 존재하지 않습니다!');
+  });
 
   const emailRegister = register(EMAIL, {
     required: '이메일을 입력해주세요!',
@@ -38,11 +41,11 @@ const SigninPage: NextPageWithLayout = () => {
 
   return (
     <Card className='w-96'>
-      <CardBody className='flex flex-col gap-8 mb-4'>
+      <CardBody className='flex flex-col gap-6 mb-4'>
         <Typography className='self-center mb-4' variant='h3' color='black'>
           로그인
         </Typography>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 mb-2'>
           <Input label='Email' size='lg' {...emailRegister} />
           <ErrorMessage errors={formState.errors} name={EMAIL} />
         </div>
