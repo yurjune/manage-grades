@@ -6,20 +6,17 @@ import {
   CardBody,
   CardFooter,
   Dialog,
-  Input,
-  Option,
-  Select,
   Typography,
   type DialogProps,
 } from '@material-tailwind/react';
-import { Controller, useForm } from 'react-hook-form';
-import { ErrorMessage } from './ErrorMessage';
+import { useForm } from 'react-hook-form';
+import { InputField, SelectField } from './ControlledFields';
 
 const NAME = 'name';
 const GENDER = 'gender';
 const GRADE = 'grade';
 const GROUP = 'group';
-type FormValue = Pick<Student, 'name' | 'gender' | 'grade' | 'group'>;
+type FormValue = Pick<Student, typeof NAME | typeof GENDER | typeof GRADE | typeof GROUP>;
 
 interface StudentDialogProps extends Pick<DialogProps, 'open'> {
   handleDialog: () => void;
@@ -30,7 +27,7 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
   const [addStudent] = useAddStudentMutation();
   const [editStudent] = useEditStudentMutation();
 
-  const { register, handleSubmit, control, reset, formState } = useForm<FormValue>({
+  const { handleSubmit, control, reset } = useForm<FormValue>({
     values: {
       name: selectedStudent?.name ?? '',
       gender: selectedStudent?.gender ?? '',
@@ -59,61 +56,33 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
             {selectedStudent ? '학생 수정' : '학생 추가'}
           </Typography>
           <form className='flex flex-col gap-6'>
-            <div className='flex flex-col gap-2'>
-              <Input {...register(NAME, required)} label='이름' size='lg' />
-              <ErrorMessage name={NAME} errors={formState.errors} />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <Controller
-                name={GENDER}
-                control={control}
-                rules={required}
-                render={({ field }) => (
-                  <Select {...field} label='성별'>
-                    {['남', '여'].map((val) => (
-                      <Option key={val} value={val}>
-                        {val}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              />
-              <ErrorMessage name={GENDER} errors={formState.errors} />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <Controller
-                name={GRADE}
-                control={control}
-                rules={required}
-                render={({ field }) => (
-                  <Select {...field} label='학년'>
-                    {['1', '2', '3'].map((val) => (
-                      <Option key={val} value={val}>
-                        {val}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              />
-              <ErrorMessage name={GRADE} errors={formState.errors} />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <Controller
-                name={GROUP}
-                control={control}
-                rules={required}
-                render={({ field }) => (
-                  <Select {...field} label='반'>
-                    {['A', 'B', 'C'].map((val) => (
-                      <Option key={val} value={val}>
-                        {val}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              />
-              <ErrorMessage name={GROUP} errors={formState.errors} />
-            </div>
+            <InputField
+              control={control}
+              name={NAME}
+              rules={required}
+              inputProps={{ label: '이름', size: 'lg' }}
+            />
+            <SelectField
+              control={control}
+              name={GENDER}
+              rules={required}
+              options={['남', '녀']}
+              selectProps={{ label: '성별' }}
+            />
+            <SelectField
+              control={control}
+              name={GRADE}
+              rules={required}
+              options={['1', '2', '3']}
+              selectProps={{ label: '학년' }}
+            />
+            <SelectField
+              control={control}
+              name={GROUP}
+              rules={required}
+              options={['A', 'B', 'C']}
+              selectProps={{ label: '반' }}
+            />
           </form>
         </CardBody>
         <CardFooter className='pt-0'>
