@@ -8,3 +8,4 @@ export * from './SpinnerContainer';
 export * from './CustomTabs';
 export * from './ScoreDialog';
 export * from './LoadingView';
+export * from './ErrorMessage';
