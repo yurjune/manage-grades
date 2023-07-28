@@ -12,17 +12,21 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { Provider } from 'react-redux';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-function App({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, ...rest }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   return getLayout(
-    <ThemeProvider value={customTheme}>
-      <Component {...pageProps} />
-      <Toaster />
-    </ThemeProvider>,
+    <Provider store={store}>
+      <ThemeProvider value={customTheme}>
+        <Component {...props.pageProps} />
+        <Toaster />
+      </ThemeProvider>
+    </Provider>,
   );
 }
 
@@ -49,4 +53,4 @@ const customTheme = {
   },
 };
 
-export default wrapper.withRedux(App);
+export default App;
