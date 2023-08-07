@@ -1,9 +1,9 @@
 import { Input, InputProps } from '@material-tailwind/react';
-import { forwardRef } from 'react';
+import { forwardRef, PropsWithoutRef } from 'react';
 import { UseFormRegisterReturn, UseFormReturn } from 'react-hook-form';
 import { ErrorMessage } from '../ErrorMessage';
 
-type InputFieldProps = Omit<UseFormRegisterReturn, 'ref'> & {
+type InputFieldProps = PropsWithoutRef<UseFormRegisterReturn> & {
   inputProps?: InputProps;
   formState: UseFormReturn['formState'];
 };
