@@ -20,13 +20,15 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   const { store, props } = wrapper.useWrappedStore(rest);
 
-  return getLayout(
+  return (
     <Provider store={store}>
-      <ThemeProvider value={customTheme}>
-        <Component {...props.pageProps} />
-        <Toaster />
-      </ThemeProvider>
-    </Provider>,
+      {getLayout(
+        <ThemeProvider value={customTheme}>
+          <Component {...props.pageProps} />
+          <Toaster />
+        </ThemeProvider>,
+      )}
+    </Provider>
   );
 }
 
