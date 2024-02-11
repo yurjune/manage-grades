@@ -4,6 +4,7 @@ import { wrapper } from '@/redux/store';
 import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/shared/constants';
 import { getAverageScoresOfSemester } from '@/shared/utils';
 import { Option, Select } from '@material-tailwind/react';
+import Head from 'next/head';
 import { Fragment, ReactNode, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
@@ -75,9 +76,14 @@ export const StatisticsPage = () => {
 
 StatisticsPage.getLayout = function Layout(page: ReactNode) {
   return (
-    <PrivateRoute>
-      <DashboardLayout title='성적 통계'>{page}</DashboardLayout>
-    </PrivateRoute>
+    <>
+      <Head>
+        <title>성적 통계</title>
+      </Head>
+      <PrivateRoute>
+        <DashboardLayout title='성적 통계'>{page}</DashboardLayout>
+      </PrivateRoute>
+    </>
   );
 };
 

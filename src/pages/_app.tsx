@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import Head from 'next/head';
 import { Provider } from 'react-redux';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
@@ -21,14 +22,19 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
-    <Provider store={store}>
-      {getLayout(
-        <ThemeProvider value={customTheme}>
-          <Component {...props.pageProps} />
-          <Toaster />
-        </ThemeProvider>,
-      )}
-    </Provider>
+    <>
+      <Head>
+        <title>성적 관리 시스템</title>
+      </Head>
+      <Provider store={store}>
+        {getLayout(
+          <ThemeProvider value={customTheme}>
+            <Component {...props.pageProps} />
+            <Toaster />
+          </ThemeProvider>,
+        )}
+      </Provider>
+    </>
   );
 }
 

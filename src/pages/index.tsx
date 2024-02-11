@@ -8,6 +8,7 @@ import { wrapper } from '@/redux/store';
 import { GROUP_FIELDS, STUDENT_FIELDS } from '@/shared/constants';
 import type { NextPageWithLayout } from '@/shared/model';
 import { Button } from '@material-tailwind/react';
+import Head from 'next/head';
 import { Fragment, ReactNode, useState } from 'react';
 
 const TABLE_FIELDS = [...STUDENT_FIELDS, '수정/삭제'];
@@ -57,9 +58,14 @@ const Home: NextPageWithLayout = () => {
 
 Home.getLayout = function Layout(page: ReactNode) {
   return (
-    <PrivateRoute>
-      <DashboardLayout title='학생 관리'>{page}</DashboardLayout>
-    </PrivateRoute>
+    <>
+      <Head>
+        <title>학생 관리</title>
+      </Head>
+      <PrivateRoute>
+        <DashboardLayout title='학생 관리'>{page}</DashboardLayout>
+      </PrivateRoute>
+    </>
   );
 };
 

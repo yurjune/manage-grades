@@ -3,6 +3,7 @@ import { env } from '@/shared/constants';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { NextPageWithLayout } from '@/shared/model';
 import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
+import Head from 'next/head';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -73,7 +74,14 @@ const SigninPage: NextPageWithLayout = () => {
 };
 
 SigninPage.getLayout = (page: ReactNode) => {
-  return <AuthLayout>{page}</AuthLayout>;
+  return (
+    <>
+      <Head>
+        <title>로그인</title>
+      </Head>
+      <AuthLayout>{page}</AuthLayout>;
+    </>
+  );
 };
 
 export default SigninPage;
