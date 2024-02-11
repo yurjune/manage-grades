@@ -11,3 +11,4 @@ export * from './LoadingView';
 export * from './ErrorMessage';
 export * from './Toaster';
 export * from './CustomFields';
+export * from './PrivateRoute';
