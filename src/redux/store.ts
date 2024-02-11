@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { firestoreApi } from './firestoreApi';
-import studentReducer from './features/student/studentSlice';
-import dialogsReducer from './features/dialogs/dialogsSlice';
 import { createWrapper } from 'next-redux-wrapper';
+import dialogsReducer from './features/dialogs/dialogsSlice';
+import studentReducer from './features/student/studentSlice';
+import userReducer from './features/userSlice';
+import { firestoreApi } from './firestoreApi';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       student: studentReducer,
       dialogs: dialogsReducer,
+      user: userReducer,
       [firestoreApi.reducerPath]: firestoreApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(firestoreApi.middleware),
