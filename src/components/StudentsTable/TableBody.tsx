@@ -1,6 +1,6 @@
 import { Student } from '@/shared/model';
-import { openStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
-import { selectStudent } from '@/redux/features/student/studentSlice';
+import { openStudentDialog } from '@/redux/features/dialogsSlice';
+import { selectStudent } from '@/redux/features/studentSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { IconButton, Typography } from '@material-tailwind/react';
 import { FaEdit } from 'react-icons/fa';

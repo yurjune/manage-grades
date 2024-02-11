@@ -1,7 +1,7 @@
 import { CustomTabs, DashboardLayout, PrivateRoute, StudentDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/StudentsTable';
-import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
-import { selectStudent } from '@/redux/features/student/studentSlice';
+import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogsSlice';
+import { selectStudent } from '@/redux/features/studentSlice';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { wrapper } from '@/redux/store';

@@ -1,6 +1,6 @@
 import { Student } from '@/shared/model';
-import { openScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
-import { selectStudent } from '@/redux/features/student/studentSlice';
+import { openScoreDialog } from '@/redux/features/dialogsSlice';
+import { selectStudent } from '@/redux/features/studentSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import { Typography, IconButton } from '@material-tailwind/react';
 import { Fragment } from 'react';

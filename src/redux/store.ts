@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
-import dialogsReducer from './features/dialogs/dialogsSlice';
-import studentReducer from './features/student/studentSlice';
+import dialogsReducer from './features/dialogsSlice';
+import studentReducer from './features/studentSlice';
 import userReducer from './features/userSlice';
 import { firestoreApi } from './firestoreApi';
 
