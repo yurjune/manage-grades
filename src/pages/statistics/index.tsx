@@ -1,8 +1,7 @@
-import { CustomTabs, DashboardLayout } from '@/components';
+import { CustomTabs, DashboardLayout, PrivateRoute } from '@/components';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { wrapper } from '@/redux/store';
 import { SEMESTER_FIELDS, SUBJECT_FIELDS, GROUP_FIELDS as _GROUP_FIELDS } from '@/shared/constants';
-import { AuthProvider } from '@/shared/context';
 import { getAverageScoresOfSemester } from '@/shared/utils';
 import { Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
@@ -74,6 +73,16 @@ export const StatisticsPage = () => {
   );
 };
 
+StatisticsPage.getLayout = function Layout(page: ReactNode) {
+  return (
+    <PrivateRoute>
+      <DashboardLayout title='성적 통계'>{page}</DashboardLayout>
+    </PrivateRoute>
+  );
+};
+
+export default StatisticsPage;
+
 const chartOptions = {
   maxBarThickness: 50,
   scales: {
@@ -99,13 +108,3 @@ const chartOptions = {
     },
   },
 };
-
-StatisticsPage.getLayout = (page: ReactNode) => {
-  return (
-    <AuthProvider>
-      <DashboardLayout title='성적 통계'>{page}</DashboardLayout>
-    </AuthProvider>
-  );
-};
-
-export default StatisticsPage;

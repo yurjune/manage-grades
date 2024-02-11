@@ -1,4 +1,4 @@
-import { CustomTabs, DashboardLayout, ScoreDialog } from '@/components';
+import { CustomTabs, DashboardLayout, PrivateRoute, ScoreDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/SemestersTable';
 import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
@@ -6,7 +6,6 @@ import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { wrapper } from '@/redux/store';
 import { GROUP_FIELDS, SEMESTER_FIELDS, SUBJECT_FIELDS } from '@/shared/constants';
-import { AuthProvider } from '@/shared/context';
 import { NextPageWithLayout } from '@/shared/model';
 import { Button, Option, Select } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
@@ -76,11 +75,11 @@ const ScoresPage: NextPageWithLayout = () => {
   );
 };
 
-ScoresPage.getLayout = (page: ReactNode) => {
+ScoresPage.getLayout = function Layout(page: ReactNode) {
   return (
-    <AuthProvider>
+    <PrivateRoute>
       <DashboardLayout title='성적 관리'>{page}</DashboardLayout>
-    </AuthProvider>
+    </PrivateRoute>
   );
 };
 

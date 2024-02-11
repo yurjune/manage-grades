@@ -1,9 +1,9 @@
 import { AuthLayout, ErrorMessage } from '@/components';
 import { env } from '@/shared/constants';
-import { AuthContext, AuthProvider } from '@/shared/context';
+import { useAuth } from '@/shared/hooks/useAuth';
 import { NextPageWithLayout } from '@/shared/model';
 import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
-import { ReactNode, useContext } from 'react';
+import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -17,7 +17,7 @@ const PW = 'pw';
 
 const SigninPage: NextPageWithLayout = () => {
   const { register, handleSubmit, formState } = useForm<LoginFormValue>();
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
 
   const handleTestAccountClick = async () => {
     login(env.TEST_EMAIL, env.TEST_PW);
@@ -73,11 +73,7 @@ const SigninPage: NextPageWithLayout = () => {
 };
 
 SigninPage.getLayout = (page: ReactNode) => {
-  return (
-    <AuthProvider>
-      <AuthLayout>{page}</AuthLayout>;
-    </AuthProvider>
-  );
+  return <AuthLayout>{page}</AuthLayout>;
 };
 
 export default SigninPage;

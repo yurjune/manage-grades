@@ -1,13 +1,12 @@
-import { CustomTabs, DashboardLayout, StudentDialog } from '@/components';
+import { CustomTabs, DashboardLayout, PrivateRoute, StudentDialog } from '@/components';
 import { Table, TableBody, TableHead } from '@/components/StudentsTable';
-import { STUDENT_FIELDS, GROUP_FIELDS } from '@/shared/constants';
-import { AuthProvider } from '@/shared/context';
-import type { NextPageWithLayout } from '@/shared/model';
 import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogs/dialogsSlice';
 import { selectStudent } from '@/redux/features/student/studentSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { wrapper } from '@/redux/store';
+import { GROUP_FIELDS, STUDENT_FIELDS } from '@/shared/constants';
+import type { NextPageWithLayout } from '@/shared/model';
 import { Button } from '@material-tailwind/react';
 import { Fragment, ReactNode, useState } from 'react';
 
@@ -56,11 +55,11 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = (page: ReactNode) => {
+Home.getLayout = function Layout(page: ReactNode) {
   return (
-    <AuthProvider>
+    <PrivateRoute>
       <DashboardLayout title='학생 관리'>{page}</DashboardLayout>
-    </AuthProvider>
+    </PrivateRoute>
   );
 };
 
