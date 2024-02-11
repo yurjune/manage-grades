@@ -21,7 +21,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
   };
 });
 
-export const StasticsPage = () => {
+export const StatisticsPage = () => {
   const [tabValue, setTabValue] = useState(initialTabValue);
   const [semester, setSemester] = useState(SEMESTER_FIELDS[0]);
   const { data: totalStudents = [] } = useGetStudentsQuery({ group: '' });
@@ -100,7 +100,7 @@ const chartOptions = {
   },
 };
 
-StasticsPage.getLayout = (page: ReactNode) => {
+StatisticsPage.getLayout = (page: ReactNode) => {
   return (
     <AuthProvider>
       <DashboardLayout title='성적 통계'>{page}</DashboardLayout>
@@ -108,4 +108,4 @@ StasticsPage.getLayout = (page: ReactNode) => {
   );
 };
 
-export default StasticsPage;
+export default StatisticsPage;

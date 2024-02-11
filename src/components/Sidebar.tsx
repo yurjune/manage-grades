@@ -20,7 +20,7 @@ const lists = [
   },
   {
     title: '성적 통계',
-    path: '/stastics',
+    path: '/statistics',
     icon: <PresentationChartBarIcon className='h-5 w-5' />,
   },
 ];

@@ -35,7 +35,7 @@ const SigninPage: NextPageWithLayout = () => {
     },
   });
 
-  const pwRegiter = register(PW, {
+  const pwRegister = register(PW, {
     required: '비밀번호를 입력해주세요!',
   });
 
@@ -50,7 +50,7 @@ const SigninPage: NextPageWithLayout = () => {
           <ErrorMessage errors={formState.errors} name={EMAIL} />
         </div>
         <div className='flex flex-col gap-2'>
-          <Input label='Password' size='lg' {...pwRegiter} />
+          <Input label='Password' size='lg' {...pwRegister} />
           <ErrorMessage errors={formState.errors} name={PW} />
         </div>
       </CardBody>

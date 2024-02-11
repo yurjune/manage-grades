@@ -34,7 +34,7 @@ export const TableBody = ({ rows }: TableBodyProps) => {
     setOpen(false);
   };
 
-  const handleComfirm = async () => {
+  const handleConfirm = async () => {
     if (selectedStudent == null) return;
     await deleteStudent(selectedStudent.uid);
     handleClose();
@@ -82,7 +82,7 @@ export const TableBody = ({ rows }: TableBodyProps) => {
           );
         })}
       </tbody>
-      <DeleteConfirmDialog open={open} onClose={handleClose} onConfirm={handleComfirm} />
+      <DeleteConfirmDialog open={open} onClose={handleClose} onConfirm={handleConfirm} />
     </Fragment>
   );
 };
