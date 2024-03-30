@@ -10,18 +10,20 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
+enum Field {
+  EMAIL = 'email',
+  PW = 'pw',
+}
+
 const loginSchema = z.object({
-  email: z.string().email({ message: '이메일 형식에 맞지 않습니다.' }),
-  pw: z
+  [Field.EMAIL]: z.string().email({ message: '이메일 형식에 맞지 않습니다.' }),
+  [Field.PW]: z
     .string()
     .min(8, { message: '비밀번호는 8자 이상 20자 이하여야 합니다.' })
     .max(20, { message: '비밀번호는 8자 이상 20자 이하여야 합니다.' }),
 });
 
 type LoginFormValue = z.infer<typeof loginSchema>;
-
-const EMAIL = 'email';
-const PW = 'pw';
 
 const SigninPage: NextPageWithLayout = () => {
   const { register, handleSubmit, formState } = useForm<LoginFormValue>({
@@ -31,11 +33,7 @@ const SigninPage: NextPageWithLayout = () => {
 
   const { login } = useAuth();
 
-  const handleTestAccountClick = async () => {
-    await login(env.TEST_EMAIL, env.TEST_PW);
-  };
-
-  const onSubmit = handleSubmit(async () => {
+  const handleSubmitForm = handleSubmit(async () => {
     try {
       await new Promise<string>((res) => {
         setTimeout(() => res('success'), 1000);
@@ -45,6 +43,10 @@ const SigninPage: NextPageWithLayout = () => {
     }
   });
 
+  const handleClickTestAccount = async () => {
+    await login(env.TEST_EMAIL, env.TEST_PW);
+  };
+
   return (
     <Card className='w-96'>
       <CardBody className='flex flex-col gap-6 mb-4'>
@@ -53,18 +55,18 @@ const SigninPage: NextPageWithLayout = () => {
         </Typography>
 
         <div className='flex flex-col gap-1'>
-          <Input label='Email' size='lg' {...register(EMAIL)} />
-          <ErrorMessage errors={formState.errors} name={EMAIL} />
+          <Input label='Email' size='lg' {...register(Field.EMAIL)} />
+          <ErrorMessage errors={formState.errors} name={Field.EMAIL} />
         </div>
 
         <div className='flex flex-col gap-1'>
-          <Input type='password' label='Password' size='lg' {...register(PW)} />
-          <ErrorMessage errors={formState.errors} name={PW} />
+          <Input type='password' label='Password' size='lg' {...register(Field.PW)} />
+          <ErrorMessage errors={formState.errors} name={Field.PW} />
         </div>
       </CardBody>
 
       <CardFooter className='pt-0 flex flex-col gap-4'>
-        <Button className='text-sm' variant='gradient' fullWidth onClick={onSubmit}>
+        <Button className='text-sm' variant='gradient' fullWidth onClick={handleSubmitForm}>
           로그인
         </Button>
 
@@ -73,7 +75,7 @@ const SigninPage: NextPageWithLayout = () => {
           variant='gradient'
           fullWidth
           color='pink'
-          onClick={handleTestAccountClick}
+          onClick={handleClickTestAccount}
         >
           테스트 계정 이용하기
         </Button>
