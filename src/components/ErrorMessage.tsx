@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorMessage as HFErrorMEssage } from '@hookform/error-message';
+import { ErrorMessage as HookFormError } from '@hookform/error-message';
 import { FieldErrors } from 'react-hook-form';
 
 interface ErrorMessageProps {
@@ -11,7 +11,7 @@ interface ErrorMessageProps {
 
 export const ErrorMessage = ({ errors, name, mt, mb }: ErrorMessageProps) => {
   return (
-    <HFErrorMEssage
+    <HookFormError
       errors={errors}
       name={name}
       render={({ message }) => (

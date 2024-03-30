@@ -28,37 +28,45 @@ const SigninPage: NextPageWithLayout = () => {
     toast.error('회원 정보가 존재하지 않습니다!');
   });
 
-  const emailRegister = register(EMAIL, {
-    required: '이메일을 입력해주세요!',
-    pattern: {
-      value: /\S+@\S+\.\S+/,
-      message: '이메일 형식에 맞지 않습니다!',
-    },
-  });
-
-  const pwRegister = register(PW, {
-    required: '비밀번호를 입력해주세요!',
-  });
-
   return (
     <Card className='w-96'>
       <CardBody className='flex flex-col gap-6 mb-4'>
         <Typography className='self-center mb-4' variant='h3' color='black'>
           로그인
         </Typography>
+
         <div className='flex flex-col gap-2 mb-2'>
-          <Input label='Email' size='lg' {...emailRegister} />
+          <Input
+            label='Email'
+            size='lg'
+            {...register(EMAIL, {
+              required: '이메일을 입력해주세요!',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: '이메일 형식에 맞지 않습니다!',
+              },
+            })}
+          />
           <ErrorMessage errors={formState.errors} name={EMAIL} />
         </div>
+
         <div className='flex flex-col gap-2'>
-          <Input label='Password' size='lg' {...pwRegister} />
+          <Input
+            label='Password'
+            size='lg'
+            {...register(PW, {
+              required: '비밀번호를 입력해주세요!',
+            })}
+          />
           <ErrorMessage errors={formState.errors} name={PW} />
         </div>
       </CardBody>
+
       <CardFooter className='pt-0 flex flex-col gap-4'>
         <Button className='text-sm' variant='gradient' fullWidth onClick={onSubmit}>
           로그인
         </Button>
+
         <Button
           className='text-sm'
           variant='gradient'
