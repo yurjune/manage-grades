@@ -2,30 +2,47 @@ import { AuthLayout, ErrorMessage } from '@/components';
 import { env } from '@/shared/constants';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { NextPageWithLayout } from '@/shared/model';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material-tailwind/react';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
 
-type LoginFormValue = {
-  email: string;
-  pw: string;
-};
+const loginSchema = z.object({
+  email: z.string().email({ message: '이메일 형식에 맞지 않습니다.' }),
+  pw: z
+    .string()
+    .min(8, { message: '비밀번호는 8자 이상 20자 이하여야 합니다.' })
+    .max(20, { message: '비밀번호는 8자 이상 20자 이하여야 합니다.' }),
+});
+
+type LoginFormValue = z.infer<typeof loginSchema>;
 
 const EMAIL = 'email';
 const PW = 'pw';
 
 const SigninPage: NextPageWithLayout = () => {
-  const { register, handleSubmit, formState } = useForm<LoginFormValue>();
+  const { register, handleSubmit, formState } = useForm<LoginFormValue>({
+    mode: 'onSubmit',
+    resolver: zodResolver(loginSchema),
+  });
+
   const { login } = useAuth();
 
   const handleTestAccountClick = async () => {
-    login(env.TEST_EMAIL, env.TEST_PW);
+    await login(env.TEST_EMAIL, env.TEST_PW);
   };
 
-  const onSubmit = handleSubmit(() => {
-    toast.error('회원 정보가 존재하지 않습니다!');
+  const onSubmit = handleSubmit(async () => {
+    try {
+      await new Promise<string>((res) => {
+        setTimeout(() => res('success'), 1000);
+      });
+    } finally {
+      toast.error('회원 정보가 존재하지 않습니다!');
+    }
   });
 
   return (
@@ -35,29 +52,13 @@ const SigninPage: NextPageWithLayout = () => {
           로그인
         </Typography>
 
-        <div className='flex flex-col gap-2 mb-2'>
-          <Input
-            label='Email'
-            size='lg'
-            {...register(EMAIL, {
-              required: '이메일을 입력해주세요!',
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: '이메일 형식에 맞지 않습니다!',
-              },
-            })}
-          />
+        <div className='flex flex-col gap-1'>
+          <Input label='Email' size='lg' {...register(EMAIL)} />
           <ErrorMessage errors={formState.errors} name={EMAIL} />
         </div>
 
-        <div className='flex flex-col gap-2'>
-          <Input
-            label='Password'
-            size='lg'
-            {...register(PW, {
-              required: '비밀번호를 입력해주세요!',
-            })}
-          />
+        <div className='flex flex-col gap-1'>
+          <Input type='password' label='Password' size='lg' {...register(PW)} />
           <ErrorMessage errors={formState.errors} name={PW} />
         </div>
       </CardBody>
