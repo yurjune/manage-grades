@@ -17,6 +17,7 @@ import { ZodError, z } from 'zod';
 import { InputField, SelectField } from './CustomFields';
 import { ErrorMessage } from './ErrorMessage';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 enum Field {
   SEMESTER = 'semester',
@@ -49,7 +50,9 @@ type FormValue = z.infer<typeof scoreSchema>;
 
 export const ScoreDialog = (props: ScoreDialogProps) => {
   const { open, handleDialog, students, semesters, selectedStudent, currentSemester } = props;
+  const [loading, setLoading] = useState(false);
   const [addScores] = useAddScoresMutation();
+
   const editMode = Boolean(selectedStudent);
   const exScores = selectedStudent?.semesters?.[currentSemester];
 
@@ -68,6 +71,7 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
   const handleFormSubmit = handleSubmit(async (values) => {
     try {
       const parsed = scoreSchema.parse(values);
+      setLoading(true);
       await addScores(parsed);
       handleDialog();
       reset();
@@ -76,6 +80,8 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
       if (err instanceof ZodError) {
         console.error(err);
       }
+    } finally {
+      setLoading(false);
     }
   });
 
@@ -139,7 +145,12 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
         </CardBody>
 
         <CardFooter className='pt-0'>
-          <Button variant='gradient' onClick={handleFormSubmit} className='float-right'>
+          <Button
+            variant='gradient'
+            onClick={handleFormSubmit}
+            className='float-right'
+            loading={loading}
+          >
             등록
           </Button>
         </CardFooter>

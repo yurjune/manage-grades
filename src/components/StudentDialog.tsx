@@ -14,6 +14,7 @@ import { InputField, SelectField } from './CustomFields';
 import { ZodError, z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 enum Field {
   NAME = 'name',
@@ -37,6 +38,7 @@ interface StudentDialogProps extends Pick<DialogProps, 'open'> {
 }
 
 export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDialogProps) => {
+  const [loading, setLoading] = useState(false);
   const [addStudent] = useAddStudentMutation();
   const [editStudent] = useEditStudentMutation();
   const editMode = Boolean(selectedStudent);
@@ -59,6 +61,8 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
     }
     try {
       const parsed = studentSchema.parse(values);
+
+      setLoading(true);
       if (selectedStudent) {
         await editStudent({ ...parsed, uid: selectedStudent.uid });
       } else {
@@ -72,6 +76,8 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
       if (err instanceof ZodError) {
         console.error(err);
       }
+    } finally {
+      setLoading(false);
     }
   });
 
@@ -115,7 +121,7 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
         </CardBody>
 
         <CardFooter className='pt-0'>
-          <Button variant='gradient' onClick={onSubmit} className='float-right'>
+          <Button variant='gradient' onClick={onSubmit} className='float-right' loading={loading}>
             등록
           </Button>
         </CardFooter>
