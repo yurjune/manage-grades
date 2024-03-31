@@ -1,5 +1,5 @@
 import { CustomTabs, DashboardLayout, PrivateRoute, StudentDialog } from '@/components';
-import { Table, TableBody, TableHead } from '@/components/StudentsTable';
+import { StudentsTable, StudentsTableBody, StudentsTableHead } from '@/components/StudentsTable';
 import { openStudentDialog, toggleStudentDialog } from '@/redux/features/dialogsSlice';
 import { selectStudent } from '@/redux/features/studentSlice';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
@@ -42,10 +42,10 @@ const Home: NextPageWithLayout = () => {
         <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
       </div>
 
-      <Table>
-        <TableHead fields={TABLE_FIELDS} />
-        <TableBody rows={students} />
-      </Table>
+      <StudentsTable>
+        <StudentsTableHead fields={TABLE_FIELDS} />
+        <StudentsTableBody rows={students} />
+      </StudentsTable>
 
       <Button className='mt-4 float-right' onClick={() => dispatch(openStudentDialog())}>
         학생 추가

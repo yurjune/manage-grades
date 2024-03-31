@@ -9,11 +9,11 @@ import { Fragment, useState } from 'react';
 import { DeleteConfirmDialog } from '../DeleteConfirmDialog';
 import { useDeleteStudentMutation } from '@/redux/firestoreApi';
 
-interface TableBodyProps {
+interface Props {
   rows: Student[];
 }
 
-export const TableBody = ({ rows }: TableBodyProps) => {
+export const StudentsTableBody = ({ rows }: Props) => {
   const [open, setOpen] = useState(false);
   const [deleteStudent] = useDeleteStudentMutation();
   const selectedStudent = useAppSelector((state) => state.student.value);

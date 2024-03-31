@@ -1,5 +1,5 @@
 import { CustomTabs, DashboardLayout, PrivateRoute, ScoreDialog } from '@/components';
-import { Table, TableBody, TableHead } from '@/components/SemestersTable';
+import { SemesterTable, SemesterTableBody, SemesterTableHead } from '@/components/SemestersTable';
 import { openScoreDialog, toggleScoreDialog } from '@/redux/features/dialogsSlice';
 import { selectStudent } from '@/redux/features/studentSlice';
 import { firestoreApi, useGetStudentsQuery } from '@/redux/firestoreApi';
@@ -61,10 +61,10 @@ const ScoresPage: NextPageWithLayout = () => {
         </div>
       </div>
 
-      <Table>
-        <TableHead fields={TABLE_FIELDS} />
-        <TableBody rows={students ?? []} semester={semester} />
-      </Table>
+      <SemesterTable>
+        <SemesterTableHead fields={TABLE_FIELDS} />
+        <SemesterTableBody rows={students ?? []} semester={semester} />
+      </SemesterTable>
 
       <Button onClick={() => dispatch(openScoreDialog())} className='mt-4 float-right'>
         성적 추가

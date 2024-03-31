@@ -1,11 +1,11 @@
 import { Typography } from '@material-tailwind/react';
 import React from 'react';
 
-interface TableHeadProps {
+interface Props {
   fields: string[];
 }
 
-export const TableHead = ({ fields }: TableHeadProps) => {
+export const StudentsTableHead = ({ fields }: Props) => {
   return (
     <thead>
       <tr>

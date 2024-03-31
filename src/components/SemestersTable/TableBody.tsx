@@ -6,7 +6,7 @@ import { Typography, IconButton } from '@material-tailwind/react';
 import { Fragment } from 'react';
 import { FaEdit } from 'react-icons/fa';
 
-interface TableBodyProps {
+interface Props {
   rows: Student[];
   semester: string;
 }
@@ -17,7 +17,7 @@ const defaultScore = {
   english: '-',
   science: '-',
 };
-export const TableBody = ({ rows, semester }: TableBodyProps) => {
+export const SemesterTableBody = ({ rows, semester }: Props) => {
   const dispatch = useAppDispatch();
   const filteredRows = rows.filter((item) => item?.semesters?.[semester]);
 
