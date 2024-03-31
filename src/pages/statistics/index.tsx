@@ -24,6 +24,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 export const StatisticsPage = () => {
   const [tabValue, setTabValue] = useState(initialTabValue);
   const [semester, setSemester] = useState(SEMESTER_FIELDS[0]);
+
   const { data: totalStudents = [] } = useGetStudentsQuery({ group: '' });
   const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
 
@@ -65,11 +66,15 @@ export const StatisticsPage = () => {
             ))}
           </Select>
         </div>
+
         <div className='flex-1 ml-4'>
           <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
         </div>
       </div>
-      <div className='w-[90%] mx-auto'>{<Bar data={chartData} options={chartOptions} />}</div>
+
+      <div className='w-[90%] mx-auto'>
+        <Bar data={chartData} options={chartOptions} />
+      </div>
     </Fragment>
   );
 };

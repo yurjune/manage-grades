@@ -26,6 +26,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 const Home: NextPageWithLayout = () => {
   const [tabValue, setTabValue] = useState(initialGroupValue);
   const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
+
   const open = useAppSelector((state) => state.dialogs.studentDialogOpen);
   const selectedStudent = useAppSelector((state) => state.student.value);
   const dispatch = useAppDispatch();
@@ -40,13 +41,16 @@ const Home: NextPageWithLayout = () => {
       <div className='mb-4'>
         <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
       </div>
+
       <Table>
         <TableHead fields={TABLE_FIELDS} />
         <TableBody rows={students} />
       </Table>
+
       <Button className='mt-4 float-right' onClick={() => dispatch(openStudentDialog())}>
         학생 추가
       </Button>
+
       <StudentDialog
         open={open}
         handleDialog={handleStudentDialog}

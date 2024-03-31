@@ -26,7 +26,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
 const ScoresPage: NextPageWithLayout = () => {
   const [tabValue, setTabValue] = useState(initialGroupValue);
   const [semester, setSemester] = useState(SEMESTER_FIELDS[0]);
+
   const { data: students = [] } = useGetStudentsQuery({ group: tabValue });
+
   const open = useAppSelector((state) => state.dialogs.scoreDialogOpen);
   const selectedStudent = useAppSelector((state) => state.student.value);
   const dispatch = useAppDispatch();
@@ -53,17 +55,21 @@ const ScoresPage: NextPageWithLayout = () => {
             ))}
           </Select>
         </div>
+
         <div className='flex-1 ml-4'>
           <CustomTabs fields={GROUP_FIELDS} value={tabValue} onChange={(val) => setTabValue(val)} />
         </div>
       </div>
+
       <Table>
         <TableHead fields={TABLE_FIELDS} />
         <TableBody rows={students ?? []} semester={semester} />
       </Table>
+
       <Button onClick={() => dispatch(openScoreDialog())} className='mt-4 float-right'>
         성적 추가
       </Button>
+
       <ScoreDialog
         open={open}
         handleDialog={handleScoreDialog}

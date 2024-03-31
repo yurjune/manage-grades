@@ -48,8 +48,14 @@ interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
 
 type FormValue = z.infer<typeof scoreSchema>;
 
-export const ScoreDialog = (props: ScoreDialogProps) => {
-  const { open, handleDialog, students, semesters, selectedStudent, currentSemester } = props;
+export const ScoreDialog = ({
+  open,
+  handleDialog,
+  students,
+  semesters,
+  selectedStudent,
+  currentSemester,
+}: ScoreDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [addScores] = useAddScoresMutation();
 
