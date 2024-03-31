@@ -1,5 +1,6 @@
 import { useAddScoresMutation } from '@/redux/firestoreApi';
-import { Score, Student } from '@/shared/model';
+import { Student } from '@/shared/model';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   Card,
@@ -12,10 +13,29 @@ import {
   Typography,
 } from '@material-tailwind/react';
 import { Controller, useForm } from 'react-hook-form';
+import { ZodError, z } from 'zod';
 import { InputField, SelectField } from './CustomFields';
 import { ErrorMessage } from './ErrorMessage';
+import toast from 'react-hot-toast';
 
-type FormValue = { uid: string; semester: string } & Score;
+enum Field {
+  SEMESTER = 'semester',
+  UID = 'uid',
+  KOREAN = 'korean',
+  ENGLISH = 'english',
+  MATH = 'math',
+  SCIENCE = 'science',
+}
+
+const rangeErrorMsg = '성적은 0 이상 100 이하여야 합니다.';
+const scoreSchema = z.object({
+  [Field.SEMESTER]: z.string(),
+  [Field.UID]: z.string().min(1, '학생을 선택해주세요.'),
+  [Field.KOREAN]: z.number().min(0, rangeErrorMsg).max(100, rangeErrorMsg),
+  [Field.SCIENCE]: z.number().min(0, rangeErrorMsg).max(100, rangeErrorMsg),
+  [Field.MATH]: z.number().min(0, rangeErrorMsg).max(100, rangeErrorMsg),
+  [Field.ENGLISH]: z.number().min(0, rangeErrorMsg).max(100, rangeErrorMsg),
+});
 
 interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
   handleDialog: () => void;
@@ -24,6 +44,8 @@ interface ScoreDialogProps extends Pick<DialogProps, 'open'> {
   selectedStudent: Student | null;
   currentSemester: string;
 }
+
+type FormValue = z.infer<typeof scoreSchema>;
 
 export const ScoreDialog = (props: ScoreDialogProps) => {
   const { open, handleDialog, students, semesters, selectedStudent, currentSemester } = props;
@@ -40,22 +62,20 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
       english: exScores?.english ?? 0,
       science: exScores?.science ?? 0,
     },
+    resolver: zodResolver(scoreSchema),
   });
 
   const handleFormSubmit = handleSubmit(async (values) => {
     try {
-      const { korean, english, math, science } = values;
-      const scores = Object.values({ korean, english, math, science });
-
-      if (scores.some((score) => typeof score !== 'number' || isNaN(score))) {
-        throw new Error('Some scores are not a Number!');
-      }
-
-      await addScores(values);
+      const parsed = scoreSchema.parse(values);
+      await addScores(parsed);
       handleDialog();
       reset();
+      toast.success(editMode ? '성적을 변경하였습니다.' : '성적을 등록하였습니다.');
     } catch (err) {
-      console.error(err);
+      if (err instanceof ZodError) {
+        console.error(err);
+      }
     }
   });
 
@@ -64,14 +84,6 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
     nameWithGroup: `${student.name} (반: ${student.group})`,
   }));
 
-  const selectRules = { required: '값을 입력해 주세요!' };
-  const scoreRules = {
-    required: '값을 입력해 주세요!',
-    min: { value: 0, message: '0 이상의 값을 입력해 주세요!' },
-    max: { value: 100, message: '100 이하의 값을 입력해 주세요!' },
-    valueAsNumber: true,
-  };
-
   return (
     <Dialog size='sm' open={open} handler={handleDialog} className='bg-transparent shadow-none'>
       <Card className='mx-auto w-full'>
@@ -79,18 +91,17 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
           <Typography variant='h4' color='black' className='mb-8'>
             성적 추가
           </Typography>
+
           <form className='flex flex-col gap-8'>
             <SelectField
               name='semester'
               control={control}
-              rules={selectRules}
               selectProps={{ label: '학기' }}
               options={semesters}
             />
             <Controller
               name='uid'
               control={control}
-              rules={selectRules}
               render={({ field }) => (
                 <div className={`flex flex-col gap-2`}>
                   <Select {...field} label='학생' disabled={editMode}>
@@ -105,27 +116,28 @@ export const ScoreDialog = (props: ScoreDialogProps) => {
               )}
             />
             <InputField
-              {...register('korean', scoreRules)}
+              {...register('korean', { valueAsNumber: true })}
               formState={formState}
               inputProps={{ label: '국어', size: 'lg', type: 'number' }}
             />
             <InputField
-              {...register('english', scoreRules)}
+              {...register('english', { valueAsNumber: true })}
               formState={formState}
               inputProps={{ label: '영어', size: 'lg', type: 'number' }}
             />
             <InputField
-              {...register('math', scoreRules)}
+              {...register('math', { valueAsNumber: true })}
               formState={formState}
               inputProps={{ label: '수학', size: 'lg', type: 'number' }}
             />
             <InputField
-              {...register('science', scoreRules)}
+              {...register('science', { valueAsNumber: true })}
               formState={formState}
               inputProps={{ label: '과학', size: 'lg', type: 'number' }}
             />
           </form>
         </CardBody>
+
         <CardFooter className='pt-0'>
           <Button variant='gradient' onClick={handleFormSubmit} className='float-right'>
             등록
