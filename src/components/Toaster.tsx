@@ -10,14 +10,4 @@ const options = {
     fontSize: '0.9rem',
     padding: '0.5rem 1rem',
   },
-  success: {
-    style: {
-      background: 'green',
-    },
-  },
-  error: {
-    style: {
-      background: 'rgb(254 202 202)',
-    },
-  },
 };
