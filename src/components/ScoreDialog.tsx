@@ -12,12 +12,12 @@ import {
   Select,
   Typography,
 } from '@material-tailwind/react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ZodError, z } from 'zod';
+import toast from 'react-hot-toast';
+import { z } from 'zod';
 import { InputField, SelectField } from './CustomFields';
 import { ErrorMessage } from './ErrorMessage';
-import toast from 'react-hot-toast';
-import { useState } from 'react';
 
 enum Field {
   SEMESTER = 'semester',
@@ -75,20 +75,13 @@ export const ScoreDialog = ({
   });
 
   const handleFormSubmit = handleSubmit(async (values) => {
-    try {
-      const parsed = scoreSchema.parse(values);
-      setLoading(true);
-      await addScores(parsed);
-      handleDialog();
-      reset();
-      toast.success(editMode ? '성적을 변경하였습니다.' : '성적을 등록하였습니다.');
-    } catch (err) {
-      if (err instanceof ZodError) {
-        console.error(err);
-      }
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await addScores(values);
+    setLoading(false);
+
+    handleDialog();
+    reset();
+    toast.success(editMode ? '성적을 변경하였습니다.' : '성적을 등록하였습니다.');
   });
 
   const candidates = students.map((student) => ({

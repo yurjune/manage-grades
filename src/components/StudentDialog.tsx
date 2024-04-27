@@ -1,5 +1,6 @@
 import { useAddStudentMutation, useEditStudentMutation } from '@/redux/firestoreApi';
 import { Student } from '@/shared/model';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   Card,
@@ -9,12 +10,11 @@ import {
   Typography,
   type DialogProps,
 } from '@material-tailwind/react';
-import { useForm } from 'react-hook-form';
-import { InputField, SelectField } from './CustomFields';
-import { ZodError, z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { z } from 'zod';
+import { InputField, SelectField } from './CustomFields';
 
 enum Field {
   NAME = 'name',
@@ -54,31 +54,17 @@ export const StudentDialog = ({ open, handleDialog, selectedStudent }: StudentDi
   });
 
   const onSubmit = handleSubmit(async (values) => {
+    setLoading(true);
     if (selectedStudent) {
       await editStudent({ ...values, uid: selectedStudent.uid });
     } else {
       await addStudent({ ...values });
     }
-    try {
-      const parsed = studentSchema.parse(values);
+    setLoading(false);
 
-      setLoading(true);
-      if (selectedStudent) {
-        await editStudent({ ...parsed, uid: selectedStudent.uid });
-      } else {
-        await addStudent({ ...parsed });
-      }
-
-      handleDialog();
-      reset();
-      toast.success(editMode ? '성적을 변경하였습니다.' : '성적을 등록하였습니다.');
-    } catch (err) {
-      if (err instanceof ZodError) {
-        console.error(err);
-      }
-    } finally {
-      setLoading(false);
-    }
+    handleDialog();
+    reset();
+    toast.success(editMode ? '성적을 변경하였습니다.' : '성적을 등록하였습니다.');
   });
 
   const required = { required: '값을 입력해주세요!' };
